@@ -1,0 +1,110 @@
+STACK
+Stack Tecnológico del Proyecto
+ Frontend
+React: 18.2.0 
+Vite (build tool): 5.2.0 
+Backend
+Node.js: 20.11.1 
+Express: 4.19.2 
+Base de Datos
+MySQL: 8.0.36 
+Infraestructura
+Vercel: despliegue frontend 
+Render: despliegue backend 
+Justificación del Stack
+Librerías Principales
+ Backend
+express: 4.19.2 
+cors: 2.8.5 
+dotenv: 16.4.5 
+jsonwebtoken: 9.0.2 
+bcrypt: 5.1.0 
+multer: 1.4.5-lts.1 
+csv-parser: 3.0.0 
+mysql2: 3.9.7 
+uuid: 9.0.1 
+qrcode: 1.5.4 
+pdfkit: 0.15.0 
+nodemailer: 6.9.13 
+ Frontend
+react: 18.2.0 
+react-dom: 18.2.0 
+react-router-dom: 6.22.3 
+axios: 1.6.8 
+sweetalert2: 11.10.7 
+Estructura de Carpetas
+🔹 Backend
+backend/
+│── src/
+│   ├── config/
+│   ├── controllers/
+│   ├── services/
+│   ├── models/
+│   ├── routes/
+│   ├── middlewares/
+│   ├── utils/
+│   └── app.js
+│
+│── .env
+│── package.json
+ Frontend
+frontend/
+│── src/
+│   ├── assets/
+│   ├── components/
+│   ├── pages/
+│   ├── layouts/
+│   ├── services/
+│   ├── hooks/
+│   ├── router/
+│   └── main.jsx
+│
+│── index.html
+│── package.json
+
+
+ Comandos Base
+ Backend
+# instalar dependencias
+npm install
+
+# modo desarrollo
+npm run dev
+
+# modo producción
+npm start
+Script sugerido en package.json:
+"scripts": {
+  "dev": "nodemon src/app.js",
+  "start": "node src/app.js"
+}
+ Frontend
+# instalar dependencias
+npm install
+
+# iniciar entorno desarrollo
+npm run dev
+
+# build producción
+npm run build
+
+# preview producción
+npm run preview
+ Variables de Entorno (.env backend)
+PORT=3000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=123456
+DB_NAME=certificados_db
+
+JWT_SECRET=super_secret_key
+
+EMAIL_USER=correo@gmail.com
+EMAIL_PASS=clave_app
+Consideraciones Técnicas
+Uso obligatorio de HTTPS en producción 
+Validaciones críticas en backend 
+Manejo de errores con códigos HTTP estándar 
+Generación de PDF y QR debe ser asincrónica 
+Soporte para carga masiva (CSV/Excel) 
+Logs básicos para trazabilidad 

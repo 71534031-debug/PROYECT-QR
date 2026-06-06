@@ -1,0 +1,12 @@
+export const REQUIRED_PLACEHOLDERS = [
+  '{{NOMBRE_COMPLETO}}',
+  '{{DOCUMENTO}}',
+  '{{ACTIVIDAD_NOMBRE}}',
+  '{{FECHA_EMISION}}',
+  '{{CODIGO_UNICO}}',
+  '{{QR}}',
+  '{{LOGO_INSTITUCION}}',
+  '{{NOMBRE_AUTORIDAD}}',
+  '{{CARGO_AUTORIDAD}}',
+  '{{FIRMA_AUTORIDAD}}'
+];

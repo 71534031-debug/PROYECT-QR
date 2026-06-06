@@ -1,0 +1,111 @@
+SETUP
+Requisitos Previos
+Antes de ejecutar el proyecto, asegúrate de tener instalado:
+Sistema Operativo: Windows 10/11, Linux o macOS 
+Node.js: 20.11.1 
+npm: 10.2.4 
+MySQL: 8.0.36 
+Git: 2.44.0 
+Navegador: Chrome / Edge / Firefox (última versión) 
+Opcional pero recomendado:
+Postman (pruebas API) 
+MySQL Workbench (gestión BD) 
+ Clonar el Proyecto
+git clone https://github.com/tu-repositorio/certificados-digitales.git
+cd certificados-digitales
+Instalación del Proyecto
+🔹 Backend
+cd backend
+npm install
+🔹 Frontend
+cd ../frontend
+npm install
+Variables de Entorno
+Crear archivo .env dentro de backend/:
+# Servidor
+PORT=PUERTO_BACKEND
+
+# Base de datos
+DB_HOST=HOST_DB
+DB_USER=USUARIO_DB
+DB_PASSWORD=PASSWORD_DB
+DB_NAME=NOMBRE_DB
+
+# Autenticación
+JWT_SECRET=CLAVE_SECRETA
+
+# Email (envío de certificados)
+EMAIL_USER=CORREO_ENVIO
+EMAIL_PASS=CLAVE_CORREO
+
+# Entorno
+NODE_ENV=development
+📌 Descripción
+
+Configuración de Base de Datos
+Crear base de datos: 
+CREATE DATABASE certificados_db;
+Ejecutar scripts SQL (cuando existan): 
+# opcional si se proveen scripts
+mysql -u root -p certificados_db < schema.sql
+
+Ejecutar el Proyecto en Local
+🔹 Backend
+cd backend
+npm run dev
+Servidor disponible en:
+http://localhost:3000
+🔹 Frontend
+cd frontend
+npm run dev
+Aplicación disponible en:
+http://localhost:5173
+Ejecutar Tests
+Nota: Actualmente no se han definido scripts automatizados de testing en el proyecto.
+Ejecución manual recomendada:
+Probar endpoints con Postman 
+Validar: 
+Login 
+Registro de actividades 
+Generación de certificados 
+Validación por QR/código 
+Revisar base de datos con MySQL Workbench 
+ Si se agregan tests:
+npm test
+
+ Errores Comunes y Soluciones
+ Error: "Cannot connect to database"
+Causa: credenciales incorrectas o MySQL apagado
+Solución:
+Verificar .env 
+Iniciar servicio MySQL 
+ Error: "JWT malformed" o autenticación falla
+Causa: clave secreta inválida
+Solución:
+Revisar JWT_SECRET en .env 
+
+ Error: "Port already in use"
+Causa: puerto ocupado
+Solución:
+# cambiar puerto en .env
+PORT=3001
+
+Error: Problemas con envío de correo
+Causa: credenciales incorrectas o bloqueo SMTP
+Solución:
+Usar contraseña de aplicación (Gmail) 
+Verificar configuración SMTP 
+ Error: QR o PDF no se generan
+Causa: librerías mal instaladas
+Solución:
+npm install qrcode pdfkit
+
+Error: CORS bloqueado en frontend
+Causa: backend no permite requests
+Solución:
+Verificar middleware cors en backend 
+Error: CSV no se procesa correctamente
+Causa: formato inválido
+Solución:
+Validar estructura del archivo 
+Usar UTF-8 

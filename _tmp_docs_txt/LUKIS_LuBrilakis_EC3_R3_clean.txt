@@ -1,0 +1,586 @@
+LUKIS: A benchmark framework of geometric digital twinning for slab and beam-and-slab bridges 
+Ruodan Lu1,2*; Ioannis Brilakis3 
+* corresponding author 
+1School of Architecture, Building and Civil Engineering , Loughborough University, United Kingdom , 
+Email: r.lu@lboro.ac.uk 
+2Darwin College, University of Cambridge, United Kingdom, Email: rl508@cam.ac.uk 
+3Department of Engineering, University of Cambridge, United Kingdom, Email: ib340@cam.ac.uk  
+ 
+Abstract 
+We devise, implement, and benchmark a framework LUKIS to automate the process of geometric digital 
+twinning for existing slab and beam -and-slab bridges. LUKIS follows a top -down strategy to detect and 
+twin bridge concrete elements in point clouds into an established data format Industry Foundation Classes. 
+Existing software packages require modellers to spend many labour hours in generating shapes to fit point 
+cloud sub-parts. Previous methods can generate surface primitives combined with rule-based classification 
+to produce cuboid and cylinder models. While these methods work well in synthetic datasets or simplified 
+cases, they encounter challenges when dealing with real -world point clouds. We tackle this challenge by 
+investigating the entire workflow of geometric digital twinning for bridges and proposing LUKIS to auto-
+generate bridge objects without needing to generate low-level surface primitives. We implement LUKIS 
+on a single software platform. Experiments demonstrate its ability to rapidly twin geometric bridge concrete 
+elements. Compared to manual operation, LUKIS reduces the overall twinning time by at least 95.4% while 
+the twinning quality  (spatial accuracy) is improved. It is the first framework of its kind to achieve the 
+geometric digital twinning for primary concrete elements of bridges on one platform. It lays foundations 
+for researchers to generate semantically enriched digital twins. 
+ 
+Key words: Digital Twin, IFC, Point Cloud Data, Bridge Inspection 
+1 Introduction 
+Bridges are fundamental to a nation’s transport infrastructure network. Every time a bridge collapse occurs, 
+we are reawakened to the fact that our nation’s most iconic structures need constant vigilanc e in the form 
+of maintenance. In the United States (US) and the United Kingdom (UK), federal and state agencies, and 
+highway authorities have developed bridge inspection and rating tools (FHWA, 2012; Flaig & Lark, 2000) 
+aimed at prioritizing bridge rehabilitation projects. The US and the UK spend $12.8 billion and £4 billion 
+every year respectively to address deteriorating bridges  and maintain their road network  (ASCE, 2013; 
+NAO, 2018). The reasons behind these enormous costs are mainly because the manual inspection data 
+available in existing Bridge Management Systems (BMS) does not meet the standard of information needed 
+for sound decision-making (ASCE, 2017). Innovative digital bridge documentation techniques are urgently 
+needed to boost bridge management productivity. 
+Building Information Modelling (BIM) has been introduced and adopted for many decades in the 
+Architecture, Engineering, and Construction sector (Sacks et al., 2018). However, BIM is not an appropriate 
+model for real-time operational response. Its design-centric and static nature impedes its usage within the 
+Operation & Maintenance ( O&M) phase and lifecycle asset management. Statistics show that the 
+percentage of using BIM technology on over half of the infrastructure projects in the US and Europe has 
+doubled or even tripled from 2013 to 2017 (Buckley & Logan, 2017) . However, the implementation 
+concentrates in the design stage and is almost absent in the O&M phase (Table 1). 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Table 1 Project stage at which BIM technology provide value (Buckley & Logan, 2017) 
+ US UK France Germany 
+Before Design Begins     
+Preplanning (US)/Brief (UK, France, Germany) 7% 0% 4% 2% 
+Predesign (US)/Concept (UK, France, Germany) 15% 22% 10% 19% 
+During Design     
+Design Development (US)/Developed Design  
+(UK, France, Germany) 
+36% 49% 49% 44% 
+Construction Documentation (US Only) 11% - - - 
+Bidding/Construction/Installation     
+Bid Letting (US) 1% - - - 
+Production (UK, France, Germany)  13% 20% 22% 
+Construction (US)/Installation  
+(UK, France, Germany) 
+28% 7% 3% 13% 
+Post-Construction     
+Project Closeout (US)/As Built  
+(UK, France, Germany) 
+0% 7% 12% 0% 
+Maintenance (US)/Use (UK, France, Germany) 0% 2% 1% 0% 
+A Digital Twin (DT) (Grieves & Vickers, 2016; Parrott & Lane, 2017)  comprises both three-dimensional 
+(3D) geometry of the infrastructure components as well as a comprehensive set of semantic information, 
+including material, functions, relationships between the components, and so on (Borrmann, et al., 2018b). 
+It could be further enriched with other information, similar to what researchers implement on the Building 
+Information Models, such as sensor data (Davila Delgado et al., 2016) and damage information (Hüthwohl 
+et al., 2018). This is particularly useful for bridge inspection practice that is currently based on qualitative 
+visual assessment and high-level comparisons, as the texture and damage data can be properly integrated 
+with the geometry at the element-level of the virtual model of a bridge. The essential feature of DTs is their 
+3D geometry (Borrmann & Berkhahn, 2018) so that “geometric” is used to highlight the DT with only its 
+geometry data, i.e. gDT. We can generate gDTs using the point clouds collected with laser scanners. Laser 
+scanning is a technique to capture an object’s exact size and shape into the computer world as a collection 
+of XYZ co-ordinates. In the following texts, we introduce first (1) the Exchange Information Requirements 
+(EIRs) of DTs; and then (2) provide a brief review of software solutions to see how far they have achieved 
+in terms of the degree of automation on twinning from point clouds, according to the EIRs. 
+Exchange Information Requirements (EIRs) 
+The end-users of bridge DTs include but not limited to the inspectors, structural engineers, and decision 
+makers. The Exchange Information Requirements (EIRs) (ISO, 2017) define the information that will be 
+required by the end -users from both their own internal team and f rom suppliers/sub-contractors for the 
+development of the project and for the operation of the completed built bridge. The EIRs should clearly 
+articulate the information requirements for each supplier /sub-contractor and describe the expected 
+information deliverables in terms of documents, model files, and structured information. However, the 
+nature of the EIRs depends on the complexity of the project, the experience, and the requirements of the 
+end-users (Ashworth et al., 2019) . Experienced end-users may develop very detaile d EIRs, whilst others 
+may only set out high -level requirements and some basic rules, leaving the supplier /sub-contractors to 
+propose how those requirements will be met (Ashworth et al., 2017; Kassem et al., 2016). Detailed EIRs of 
+a DT are extensive and complex. Developing such thorough EIRs is outside the scope of this study. Given 
+the dynamic and real -time updated nature of a DT, the following bullets outline the fundamental 
+information that a bridge DT should contain for a specific moment. Broadly, EIRs should include: 
+• EIR 1 : Component-level digital representation. This means the geometric resolution of a  
+bridge DT should at component -level, not assembly -level or even lower  level (Sacks et al., 
+2017). Bridge component types include primary (e.g. pier, girder, pier cap, deck) and 
+secondary (e.g. wing walls, handrails) elements  (Kedar, 2016). Components that are totally 
+occluded, or that are too small or invisible to be discerned due to insufficient scan resolution 
+are not provided. 
+• EIR 2: Component explicit geometry representation and property sets. This means a bridge 
+DT is prepared for the use as an “Inspection Digital Model” in a BMS. A bridge DT should 
+represent the as -is geometri es of components  (Borrmann & Berkhahn, 2018) . Existing 
+methods of documenting bridge data measure geometries accurate to 10 cm or 5 cm and round 
+them up (Kedar, 2014).This is a rough estimation and notation. Defining the level of geometric 
+detail (geometric spatial accuracy) of a bridge DT is beyond the scope of this research. 
+• EIR 3: Component taxonomy. The components making up a bridge DT should not only be 
+modelled but  should also be identified and labelled  with their component types (Koch & 
+König, 2018; Ma et al., 2018).   
+• EIR 4: Component implicit information such as spatial semantics of attributes and structural 
+relationships, material, cost, schedule, and so on (Fink, 2018; Teizer & Melzner, 2018; Treeck 
+et al., 2018). A bridge DT should be sufficiently semantically meaningful to provide most of 
+the information needed for decision-making concerning the repair, retrofit or build of a bridge 
+(Sacks, Kedar, et al., 2018). 
+• EIR 5: Component damage information and the association to the bridge parts. Damage type 
+(e.g. structural/ non -structural crack, spalling, scaling, efflorescence  etc.), location, and 
+orientation should be exactly identified and embedded into the bridge DT a long with the 
+texture/image data for each visible component (Hüthwohl et al., 2018). 
+A bridge DT should also be exchanged in between various project participants who use different platforms. 
+Therefore,  
+• EIR 6: All information requirements should be presented in a vendor-neutral data format, such 
+as Industry Foundation Classes (IFC) (Borrmann et al., 2018b; Koch & König, 2018; Sacks et 
+al., 2018). 
+There are already many capable software packages on the market such as Autodesk, Bentley, Trimble and 
+ClearEdge3D, that provide the most advanced digital twinning solu tions. For example, ClearEdge3D can 
+automatically extract pipes in a plant point cloud as well as specific standard shapes like valves and flanges 
+from industry catalogues followed by fitting built -in models to them through a few clicks and manual 
+adjustments (ClearEdge3D, 2019). This means ClearEdge3D can achieve a certain degree of automation as 
+the EIRs 1, 2 and/or 3 can be partially automated. However, the spec -driven component library of 
+ClearEdge3D can only recognize and fit point cloud subparts with standardised shapes based on an industry 
+specification table. Limitations of state-of-the-art modelling software application have been highlighted in 
+research (Agapaki et al., 2018) . Modellers must first manually segment a point cloud into subparts, and 
+then manually fit 3D shapes to them ( EIR 1 & EIR 2). Fitting accurate 3D shapes to the segmented point 
+clusters is challenging because the set of allowable primitives is limited in most software applications 
+(Wang et al., 2015) so that modellers must customize unusual shapes. Then, modellers need to enrich the 
+resulting gDT with other explicit and implicit information, such as component’s taxonomy ( EIR 3 ), 
+connectivity, aggregation and so on (EIR 4), and defects ( EIR 5). Then, all EIRs need to be exported  or 
+converted in IFC format (EIR 6). 
+Real-world reinforced concrete (RC) bridge components contain skews and imperfections and cannot be 
+simply fitted using regular generic shapes. This article investigated the entire manual twinning process for 
+existing RC bridges from point clouds using CloudCompare a nd Autodesk Revit. Up until the end of the 
+process, only EIRs 1, 2, 3, and 6 were partially satisfied. Although the Revit’s Family Editor provides a 
+powerful capability to create shapes in a free -form manner, almost all the total twinning time is spent on 
+customizing shapes and fitting them to corresponding point clusters (note: the manual operation time and 
+results will be presented in Section 4). The significant “bottlenecks” of the manual operation using software 
+packages are listed as follow: 
+- Existing software packages can semi -automatically extract standardized shapes in point clouds. 
+However, they cannot automatically extract non-canonical shapes, which are frequently present in 
+RC bridges. Manual shape customization is laborious and time-consuming.  
+- EIRs 1, 2, 3, and 6 can only be manually achieved. EIRs 4 and 5 are unavailable within existing 
+applications. 
+- No single software can offer a one -stop gDT generation  solution. Modellers need to shuttle 
+intermediate results in different formats back and forth between different software packages during 
+the twinning process, giving rise to the possibility of information loss.  
+To tackle abovementioned challenges in practice, we propose LUKIS (combines the authors’ family names), 
+a twinning framework for existing bridges, aiming to meet EIRs 1, 2, 3, and 6, i.e. the EIRs required to 
+generate a gDT with component semantic labels. EIRs 4 and 5 are beyond the scope of this research. In the 
+next section, we review existing research methods related to EIRs 1, 2, 3 and 6. We then outline LUKIS in 
+Section 3 followed by demonstrating the experiments in Section 4 . We discuss the results and draw our 
+conclusions in Section 5. 
+2 Background 
+Previous research methods of twinning infrastructure using point clouds can be divided into two groups 
+according to the EIRs: (1) object detection methods (EIRs 1 and 3); and (2) 3D solid model fitting methods 
+(EIRs 2 and 6). We summarize each in turn in the following texts. 
+2.1 Object Detection in Point Clouds 
+Object detection aims to meet EIRs 1 & 3. In this work,  “detection” is defined as the combination of 
+clustering (from points to point clusters, i.e. EIR 1) and classification (labelling the point clusters, i.e. EIR 
+3). This problem has been intensively studied in research. Most existing clustering methods follow a 
+“bottom-up” approach, which goes from points to surfaces followed by semantic labelling to derive objects 
+(Dimitrov & Golparvar-Fard, 2015; Zhang et al., 2015). Most existing classification methods follow a “top-
+down” approach, which employs knowledge such as relationships and contexts to detect specific instances 
+embedded in point clou ds or to infer the semantics of components in a geo metric model (Ahmed et al., 
+2014; Riveiro et al., 2016). We review both clustering and classification methods as well as investigate how 
+far they have solved these challenges. Specific limitations are also identified. 
+ Clustering methods 
+Existing clustering works usually take bottom-up approach to meet EIR 1 (Zhang et al., 2014). As its name 
+implies, t he bottom-up approach pieces together low -level features like points to generate higher -level 
+features successively. Higher-level features include but not limited to surface normals (Macher et al., 2017), 
+meshes (Marton et al., 2009), surface patches (Zhang et al., 2015), non-uniform BSpline surfaces (NURBS) 
+(Dimitrov et al., 2016), and voxels (Vo et al., 2015). Four main methods arise from the literature: RANdom 
+Sample Consensus  (RANSAC) (Zhang et al., 2015) , Region Growing  (Walsh et al., 2013) , Hough -
+Transform (Díaz-Vilariño et al., 2015) , and Octree  paradigm (Xu et al., 2018) . Whilst the RANSAC 
+algorithm is effective to detect planar surfaces in the presence of outliers, it suffers from spurious-planes, 
+which are frequently produced around the boundaries (Jung et al., 2014) . In addition, RANSAC requires 
+prior knowledge about the data, meaning that the selection of a fixed number of shape hypotheses implies 
+that a prior estimate of the inlier ratio is available (Schnabel et al., 2007). This is often not the case in the 
+practice of twinning for real-world bridges. Region Growing (RG) is also a widely used scheme for point 
+cloud clustering whereas it has the boundary weakness issue. It excels when the point cloud does not suffer 
+from substantive occlusions. However, it tends to over segments objects when non -trivial occlusions are 
+present (Dimitrov & Golparvar-Fard, 2015). Hough-Transform (HT) is another commonly used clustering 
+method. Adan & Huber (2011) proposed HT methods to detect walls in building point clouds. HT becomes 
+computationally prohibitive when the number of dimension increases.  For example, i t requires a 5D 
+parameter space for cylinder detection (Rabbani, 2006). Thus, HT is sensitive to parameter dimensions and 
+cannot be directly applied to shapes characterized by too many parameters. This constraint impedes its use 
+in the detection of bridge objects, which often contain skews and imperfections, and cannot be described 
+using generic shapes with limited parameters.  Octree-Based (OB) methods have  been proposed to tackle 
+the issue of computational complexity  (Su et al., 2016) . However, the segmentation accuracy of  OB 
+methods is sensitive to the voxel size. Vo et al. (2015) proposed an OB algorithm which can  semi-
+automatically adjust the voxel  size using an adaptive octree. However, it faces the difficulty of patc h 
+clustering for low point density regions.  
+ Classification methods 
+Top-down methods are usually used to meet EIR 3, because above-mentioned bottom-up detection schemes 
+are rarely suitable for point cloud classification (Riveiro et al., 2016) . Without high-level information, it 
+could be difficult to determine whether low-level primitives such as local surfaces or voxels belong to the 
+same instance. The top-down approach usually combines a set of engineering criteria and classifies objects 
+in point clouds that meet the criteria. Top-down classification methods are robust because domain-specific 
+information such as known parameters (Ahmed et al., 2014), object instances (Dore & Murphy, 2014), and 
+spatial relationships (Koppula et al., 2011) , are invariant to factors such as pose and appearance. P erez-
+Gallardo et al. (2017) suggested a semantic model based system to detect four object classes in an industrial 
+scene using topological information. Riveiro et al. (2016) used topological constraints to segment masonry 
+bridge point cloud through normal clustering. However, this algorithm largely depends on data quality so 
+that it is difficult to generalize it to adapt real data suffering from occlusions and non-uniformly distributed 
+points. Ma et al., (2017) leveraged relationship knowledge and shape features to classify bridge 3D solid 
+objects (Figure 1). However, the input of this method needs to  be a geometric bridge model (not a point 
+cloud), meaning that it assumes both EIRs 1 and 2 are already achieved.  
+ 
+ 
+ 
+ 
+ 
+Figure 1 Bridge Object classification (EIR 3) (adapted from Ma et al., 2017)  
+ Learning-based methods 
+Learning-based methods are seeing a lot of use recently to detect objects in point clouds, aiming to satisfy 
+both EIRs 1 & 3 at on ce (Xiong et al., 2013) . Maturana & Scherer (2015) proposed a supervised 3D 
+Convolutional Neural Network  called VoxNet to classify objects using voxelized data. Instead of 
+transforming a point cloud into 3D voxel grids, Qi et al. (2016) introduced a deep neural network called 
+PointNet, which can directly consume points. These methods often require a substantial down -sampling 
+procedure before they can be fed even in high performance computing systems such as TensorFlow. 
+However, the resulting compressed datasets often lose feature information along the way.  
+2.2 Model Fitting to Point Clusters 
+2.2.1 Fitting methods 
+Model fitting aims to meet EIR 2 in the context of twinning for infrastructure. In other words, model fitting 
+aims to use computer graphic techniques  to form the 3D shape of a point cluster.  Existing shape 
+representation methods are categorized into four groups: Implicit Representation  (Schnabel et al., 2007) , 
+Boundary Representation  (B-Rep) (Oesau et al., 2014) , Constructive Solid  Geometry (CSG) (Xiao & 
+Furukawa, 2014), and Swept Solid Representation (SSR) (Ochmann et al., 2016). Implicit Representation 
+Shear key on 
+capping beam 
+Transverse beam 
+Primary girder 
+Shear key on abutment 
+Abutment  
+Column   
+Capping beam 
+Precast deck panel 
+Safety barrier 
+Girder 
+Capping Beam 
+Column 
+Shear Key 
+Bearing 
+Abutment  
+Deck slab  
+is of limited usefulness when twinning real-world bridge components because only a very limited number 
+of shapes can be represented by algebraic formulations. Although B-Rep is the most popular representation 
+in computer graphics, the presence of significant occlusions in point clouds challenges the forming of closed 
+mesh models. CSG methods have been proposed whereas only elementary primitives  such as cuboids, 
+cylinders, and so on are used to constitute the built environment. For example, Zhang et al. (2014) designed 
+a classifier to classify infrastructure components (EIR 3) and fit them with 3D shape s (EIRs 1 & 2). 
+However, it only used cuboids and cylinders to fit pier, girder, and deck in synthetic bridge point clouds 
+(Figure 2). Laefer & Truong-Hong (2017) used a SSR method to extrude the cross-sections of steel beams 
+in point clouds, assuming the standardized profiles do not have any damages or deformation.  
+Table 2 summarizes the most related research methods of the gDT generation from point clouds in terms of 
+the application area and the IFC maturity. 
+ 
+Figure 2 Fitted cuboids and cylinders to synthetic bridge point clusters (EIR 2)  (Zhang et al., 2014)  
+ 
+2.2.2 IFC Geometric Representations 
+A gDT making up of multiple fitted geometric shapes need to be represented in IFC format so that it can be 
+exchanged and adopted by various software tools ( EIR 6) (Venugopal et al., 2012) . IFC geometry 
+representations can be grouped into four classes (Borrmann et al., 2018a): Bounding Boxes, Curves, Surface 
+models, and Solid models. More specific, Bounding Boxes are usually used as placeholders for digital 
+twinning. They can be represented using IfcBoundingBox. IfcCurve and its subclasses can be used to model 
+line objects. Freeform curved edges (i.e. splines) and curved surfaces are required to mode l complex 
+geometries. IfcTriangulatedFaceSet can be used to represent polygons with an arbitrary number of edges, 
+or triangular mesh. IfcBSplineSurface can be used for representing curved surfaces such as NURBS. Finally, 
+
+IfcSweptAreaSolid and its subclasse s can be used to present extruded solids.  How to choose an IFC 
+geometric representation depends on the specific application scenario where we use the object being 
+twinned. Whilst software programs only need low-level triangulated mesh to visualize the geometry, gDTs 
+authoring tools usually use high-level B-Rep- or CSG-based objects so that the geometries could be edited. 
+Details of the IFC geometric representation can be found in (Borrmann et al., 2018a).
+ 
+Table 2 State of research on gDT generation from point clouds in terms of IFC maturity 
+ 
+Area 
+Bridge 
+ (Riveiro et al., 2016) (Walsh et al., 2013) (Lu et al., 2018) (Zhang et al., 2014) *(Hüthwohl et al., 2018) 
+ (Zhang et al., 2015)   (Lu & Brilakis, 2019) *(Ma et al., 2018) 
+      
+      
+      
+      
+      
+Building 
+(Dimitrov et al., 2016) (Xu et al., 2018) (Dimitrov & Golparvar-Fard, 2015) (Qi et al., 2016) (Macher et al., 2017) *(Belsky et al., 2014) 
+(Vo et al., 2015) (Wang et al., 2015) (Xiao & Furukawa, 2014) (Armeni et al., 2016) (Ochmann et al., 2016)  
+(Jung et al., 2014) (Díaz-Vilariño et al., 2015) (Schnabel et al., 2007) (Su et al., 2016) (Valero, Adán, & Bosché, 2016)  
+(Truong-Hong et al., 2013) (Xiong et al., 2013)   (Valero et al., 2012)  
+(Marton et al., 2009) (Adan & Huber, 2011)     
+ (Koppula et al., 2011)     
+      
+Industry 
+   (Patil et al., 2017) (Laefer & Truong-Hong, 2017)  
+   (Su et al., 2016)   
+   (Son et al., 2015)   
+   (Ahmed et al., 2014)   
+   (Son et al., 2013)   
+      
+      
+ 
+ 
+Surfaces Labelled Surfaces Shapes without Labels Labelled Clusters Labelled 3D Model Enriched IFC Model 
+      *Input: gDT 
+  IFC Maturity 
+ 
+ 
+3 Proposed Framework: LUKIS 
+3.1 Overview 
+We intend to solve the problem of twinning for existing RC bridges while improving our understanding of 
+the specific challenges and the extent to which we have solved the problem. The main objective of this 
+research is to develop a benchmark framework that paves the foundations for future research to build upon. 
+The top -down approach is  based on domain -knowledge and relies on a symbolic description of the 
+simplified wor ld. Its goal is to use a set of pre -defined recognition criteria or rules to mimic human  
+intelligence, hence suffers from some inherent limitations. Inevitably, a combinatorial explosion of the 
+number of rules occurs due to the complexity of the environment and it is impossible to predict all situations 
+(especially unknown ones) that will be encountered by an autonomous entity. Yet, the limitations of the top-
+down approach are irrelevant in the context of slab and beam-and-slab RC bridges. This is because the level 
+of variance of these types of bridges is relatively low compared to other real -world objects. Bridg e 
+components are distinct 3D solid objects, and the ir taxonomies for any given context are finite and well 
+defined. Therefore, this article proposes a novel top-down framework called LUKIS, which exploits bridge 
+engineering knowledge as guidance to  directly extract labelled point clusters corresponding  to bridge 
+components and then to reconstruct them into IFC objects.  
+Real-world bridges are neither perfectly straight nor flat.  Bridge geometries are defined by horizontal 
+curved alignments, vertical elevations, and varying cross-sections. A slicing-based algorithm is proposed to 
+tackle these difficulties. The algorithm is repeatedly used throughout the whole framework until all the 
+components are detected and modelled. The algorithm can deal with the skew complexity and can quickly 
+select a set of candidate locations for target objects. The global topology of a bridge can also be well 
+approximated using multiple slices.  The general thrust behind the  slice-based representation is the 
+Cavalieri’s principle (Kern & Bland, 1948), which serves as the theoretical guidance of LUKIS. Given an 
+arbitrary 3D solid along the X -axis, extending from 𝑥 = 𝑎 to 𝑥 = 𝑏 (Figure 3), the solid is divided into 𝑛 
+equally thick slices and define the usual partition: ∆𝑥 =
+𝑏−𝑎
+𝑛 ,  and 𝑥𝑖 = 𝑎 + 𝑖∆𝑥 , for 𝑖 = 1,2, … , 𝑛 , then 
+Cavalieri’s principle states that: 
+𝑉 = lim
+𝑛→∞
+∑ 𝐴(𝑥𝑖)∆𝑥𝑛
+𝑖=1 = ∫ 𝐴(𝑥)𝑑𝑥
+𝑏
+𝑎 ,  Eq.1 
+where 𝐴(𝑥) is the area of the cross-section of a slice. 
+ 
+Figure 3 An arbitrary 3D shape represented using its cross-section A(x) along X-axis 
+LUKIS only twins four most important and highly detectable primary components of typical RC slab and 
+beam-and-slab bridges: slab, pier, pier cap, and girder. It consists of two successive processes (Figure 4): 
+Process 1. Detection of the four bridge component types in point clouds, aiming to achieve EIRs 1 & 3, 
+and Process 2. Run-time model fitting to the point clusters using IFC standards, aiming to achieve EIRs 2 
+& 6. Specifically, LUKIS starts with a registered point cloud of an RC bridge. Irrele vant points such as 
+vegetation, trees, traffic and so on  are manually removed. It then aligns the cropped point cloud using 
+Principal Analysis Component (PCA) such that its centre axis i.e. horizontal alignment, is roughly parallel 
+to the X -axis of the global coordinate system.  This step outputs a roughly aligned bridge point cloud as 
+none of bridges could be positioned exactly parallel to the axes due to their real-world skewed geometry. 
+Next, LUKIS proposes a  four-step object detection method (Process 1) to detect the  four components 
+underlying in a  cropped bridge point cloud  in the form of labelled point clusters.  A manual refinement 
+procedure is then conducted to remove the noise remaining from Process 1. Next, LUKIS proposes an IFC 
+object fitting method (Process 2) to fit the refined labelled point clusters with 3D IFC objects. The output 
+of Process 2 i.e. the final output of LUKIS , is an IFC file of a bridge gDT. The novelty of LUKIS lies in 
+the fact that it integrates Process 1 and 2 into a single framework that provides a semi-automated method 
+to twin four bridge components from point clouds at one go. We outline each Process in the following 
+sections.  
+ 
+ 
+ 
+ 
+ 
+X 
+Z 
+a 
+ b 
+A(𝑥) 
+𝑥 
+Y 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 4 The workflow of the proposed framework LUKIS 
+ 
+ 
+ 
+A raw bridge point cloud  START 
+Manual cropping 
+Cropped bridge point cloud Input/Output 
+PCA alignment 
+Roughly aligned bridge Input/Output 
+Component Detection Process 1 
+Slab Input/Output Pier caps Piers Girder
+s 
+Manual refinement 
+Input/Output 
+* refined 
+*Pier caps *Piers *Girder
+s 
+Run-time fitting & IFC writer 
+Data format 
+points 
+points 
+points 
+points 
+Process 2 
+EIRs 1 & 3
+ 
+LOD 250-300 
+Bridge gDT 
+Ifc file 
+points 
+END 
+EIRs 2 & 6 
+*Slab 
+3.2 Process 1: Primary Component Detection for EIRs 1 & 3 
+We use the point cloud of the Nine Wells Bridge to demonstrate the development of Process 1. The bridge 
+was constructed to the south west of Addenbrooke’s Hospital in Cambridge in 2009 to carry a new road 
+over a railway line. It comprises three spans of approximately 30 m in length, each constructed from twelve 
+precast concrete “SY beams” with an in -situ concrete deck slab. The b ridge also contains a group of four  
+cylindrical piers with a pier cap on top, a wall -like pier, and two wall-like vertical abutments as supports. 
+The side view shows its varying elevations over the three spans (Figure 5). Process 1 bypasses the stage of 
+surface generation altogether and directly obtains labelled point clusters. It breaks down a large bridge point 
+cloud into sub-datasets through a recursive slicing algorithm. That is, the method slices the point cloud by 
+means of a “virtual parallel scalpel” with a specified equal thickness. This algorithm is repeatedly used with 
+sub-datasets until target objects are found and all small detection problems are solved. Step 1 segments a 
+whole aligned bridge point cloud into two classes: pier assembly 𝛼𝑚 and deck assembly. This is achieved 
+by segmenting the bridge point clouds into multiple slices along the X-axis and comparing the height feature 
+of each slice  using a discriminative parameter 𝜌1 (Figure 6). Then, the search area is shrunk to the pier 
+assembly 𝛼𝑚. Step 2 aims to detect pier area in pier assembly 𝛼𝑚 using a discriminative parameter 𝜌2. 
+Each extracted pier assembly 𝛼𝑚 from Step 1 is considered as a miniature of  an entire bridge point cloud 
+so that Step 2 follows the same strategy as Step 1. Next, Step 3 further narrows down the search area and 
+detects pier caps in a pier area  by investigating the normal s. Finally, Step 4 aims to detect girders. We 
+segment the entire deck assembly cluster into several spans followed by using the density histograms to 
+detect girders in each span. All over-segments are merged, and we finally acquire the four labelled point 
+clusters of bridge components (EIRs 1 & 3). Details of Process 1 and the four-step object detection method 
+can be found in (Lu et al., 2018). 
+ 
+ 
+Figure 5 (a) Northwest view; (b) Side view; and (c) SY beams of the Nine Wells Bridge (Graham, 2014) 
+ 
+ 
+ 
+ 
+ 
+(a) 
+(b) 
+(c) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 6 Slicing along X-axis in Step 1 of Process 1 
+3.3 Process 2: IFC object fitting for EIRs 2 & 6 
+Process 2 suggests a novel object fitting method that can twin an RC bridge into IFC format using the four 
+types of point cluster. The inputs of Process 2 are the point clusters generated from Process 1. The output 
+is an IFC file corresponding to level of detail LOD 250 – 300. The four types of component are represented 
+with detailed geometries through multiple slice models. SSR is preferred wherever possible if the cross -
+section of each slice is deemed constant. Process 2 consists of two major steps: Step 1, geometric feature 
+extraction of point clusters; and Step 2, IfcObjects fitting to the extracted features. We use the Model View 
+Definition proposed by Sacks et al. (2018), which provides a binding to the IFC4 Add2 standard for 
+exchanging bridge DTs and defines the mandatory IFC entities in a bridge inspection scenario.  
+For a slab point cluster IfcSlab, we use a similar but not identical slicing scheme to that proposed in Process 
+1 to slice the deck slab into multiple slices. The slicing does not take a parallel pattern but is rather oriented 
+along the normal direction of the curved alignment of the slab (Figure 7 (a)). The problem of twinning the 
+entire slab is transformed into twinning slab slices by assuming each one of them is straight along its tangent 
+direction and the cross-section of each slice is constant. That is to say, the horizontal alignment is assumed 
+gap-freedom and can be approximated by concatenating many alignment segments.  We use a 2D profile 
+IfcArbitraryClosedProfileDef and IfcExtrudedAreaSolid to describe the cross-section of each extruded 
+slice, which is defined by a 2D ConvexHull 𝛼-shape. Pier cap point clusters IfcBeam are also represented 
+Z 
+X 
+Z 
+X 
+Y 
+𝜌1 
+𝛼𝑚 𝛼𝑚
+ 𝛼𝑚
+ 𝛼𝑚
+ 
+as Swept Solid using the outline of the 𝛼-shape on the XY-plane. Then, for pier point clusters IfcColumn, 
+we use a fuzzy -logic algorithm to first classify the cross -section shape into circular, quadrilateral, and 
+others. A cylindrical pier is  represented as Swept Solid  using a 2D IfcCircleProfileDef, while a 
+quadrilateral and other shape pier  are represented using multiple slice models  through 
+IfcArbitraryClosedProfileDef and the IfcExtrudedAreaSolid (Figure 7 (b)). Finally, for girder point clusters 
+IfcBeam, we use a template matching method to find the best-match girder type in existing beam catalogue. 
+We finally acquire a bridge gDT in IFC format, making up of four types of component (EIRs 2 & 6). Details 
+of Process 2 and the proposed fitting method can be found in (Lu & Brilakis, 2019). 
+ 
+Figure 7 Slicing and twinning of Process 2 for (a) slab and (b) pier 
+Y 
+X 
+Y 
+Y 
+Z 
+X 
+X 
+Z 
+X 
+Z 
+Y 
+(a) 
+ (b) 
+4 Research Activities 
+4.1 Implementation 
+Ten highway RC slab and beam-and-slab bridge point clouds were used to test the proposed framework ( 
+Figure 8). Data can be downloaded from http://doi.org/10.5281/zenodo.1233844. Detailed statistics of the 
+data can be found in (Lu et al., 2018).  
+ 
+Figure 8 Locations of the ten bridges, scan stations, and the on-site activities 
+We implemented LUKIS on Gygax (Hüthwohl et al., 2017) into a proof of concept prototype software on 
+a desktop computer with the following system configurations : CPU Intel Core i7-4790K 4.00GHz, 
+Memory 32GB, SSD 500GB. Gygax contains three projects : GygaxCore (C#), GygaxVisu (C#) , and 
+PclWrapper (C++).  GygaxCore defines basic functionalities such as the data structures an d interfaces of 
+this platform. GygaxVisu supports visualization. Helix Toolkit was used to visualize all supported data 
+sources in a single 3D space . PclWrapper allows Gygax to access Point Cloud Library  API in a C# 
+environment. IFC Engine DLL was used to read and visualize IFC files on a logical and geometrical level. 
+Z 
+X 
+Y 
+ X 
+Y 
+Scan Stations  
+The raw bridge point clouds were  extremely noisy because we collected the  data with live traffic. Data 
+cleaning-up is needed before running any experiments. We developed a user-defined 2D clipping polygon 
+function on Gygax to manually remove irrelevant points such as the on -site traffic, vegetation, ground 
+surface and so on (Figure 9). To do so, the current graphics view of 3D points was mapped onto a 2D screen 
+by controlling the viewport to conduct the clipping . The 3D points in the world coordinates  (𝑥𝑤, 𝑦𝑤, 𝑧𝑤) 
+were transformed into a camera space followed by perspective projection and affine transformation to 
+convert the camera coordinates into the screen coordinates (𝑥𝑝𝑖𝑥, 𝑦𝑝𝑖𝑥) using: 
+𝑝(𝑥𝑝𝑖𝑥, 𝑦𝑝𝑖𝑥) =
+1
+𝑍𝑐
+𝐾[I 0][𝑅|𝑇][
+𝑥𝑤
+𝑦𝑤
+𝑧𝑤
+1
+],  
+Eq.2 
+where 𝑧𝑐 is the world coordinate 𝑧𝑤 in the camera system, 𝐾 is the intrinsic parameter of a camera, and 𝑅 
+and 𝑇 are the extrinsic parameters. We then used PCA to align the cropped bridge point cloud followed by 
+implementing Process 1 i.e. bridge component detection, and Process 2 i.e. IFC object fitting, on Gygax as 
+two successive modules. Details of Process 1 can be found in (Lu et al., 2018) and details of Process 2 can 
+be found in (Lu & Brilakis, 2019). 
+ 
+Figure 9 Top view of Bridge 1 (a) clipping polygons; (b) selected points are coloured and removed 
+4.2 Manual Operation 
+For Process 1, three ground-truth (GT) datasets: GT A, GT B, and GT C, were manually created to conduct 
+Step 1, Step 2, and the entire object detection method, respectively by researchers who are familiar with the 
+construction/form of the slab and beam-and-slab bridges (Figure 10). The GT datasets are optimal desired 
+outputs to compare against those generated from  LUKIS. We recorded the cleaning-up time (T1) and the 
+object detection time (T2) for the manual operation as well as for LUKIS. Then, for Process 2, a set of 3D 
+(a) 
+ (b) 

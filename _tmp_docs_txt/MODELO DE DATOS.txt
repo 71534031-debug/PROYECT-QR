@@ -1,0 +1,78 @@
+MODELO_DE_DATOS.md
+Descripción General
+El modelo de datos representa la estructura necesaria para soportar el sistema de generación y validación de certificados digitales.
+Está basado en los procesos definidos en el TO-BE, los requerimientos funcionales (RF-01 al RF-12) y la arquitectura del sistema.
+Entidades del Sistema
+1. usuarios
+Representa a los usuarios internos del sistema (Administrador y Personal administrativo).
+
+2.  actividades
+Representa eventos académicos o cursos que generan certificados.
+
+3. participantes
+Representa a las personas que recibirán certificados.
+
+4. actividad_participante
+Tabla intermedia que relaciona participantes con actividades.
+
+5. plantillas
+Representa las plantillas de certificados.
+
+6. certificados
+Representa los certificados generados.
+
+7. configuracion_institucional
+Representa datos globales de la institución.
+
+Relaciones del Sistema
+Relaciones principales:
+usuarios 
+(No se relaciona directamente en el modelo actual) → [PENDIENTE: auditoría / ownership] 
+actividades ↔ participantes 
+Relación: Muchos a muchos 
+Tabla intermedia: actividad_participante 
+participantes → certificados 
+Relación: Uno a muchos
+(Un participante puede tener varios certificados) 
+actividades → certificados 
+Relación: Uno a muchos
+(Una actividad genera varios certificados) 
+plantillas → certificados 
+Relación: Uno a muchos
+(Una plantilla se usa en múltiples certificados) 
+
+Claves Primarias y Foráneas
+PK (Primary Keys)
+usuarios.id 
+actividades.id 
+participantes.id 
+actividad_participante.id 
+plantillas.id 
+certificados.id 
+configuracion_institucional.id 
+FK (Foreign Keys)
+actividad_participante.actividad_id → actividades.id 
+actividad_participante.participante_id → participantes.id 
+certificados.participante_id → participantes.id 
+certificados.actividad_id → actividades.id 
+certificados.plantilla_id → plantillas.id
+Diagrama ERD (Mermaid)
+
+Elementos Pendientes / Ambiguos
+Relación de usuarios con acciones (auditoría) → [PENDIENTE] 
+Estructura interna del contenido de plantillas → [PENDIENTE] 
+Formato exacto del QR (URL / base64 / imagen) → [PENDIENTE] 
+Manejo de estados detallados → [PENDIENTE] 
+
+
+Conclusión
+Este modelo cubre completamente:
+Generación de certificados 
+Validación 
+Gestión de participantes y actividades 
+Uso de plantillas 
+Configuración institucional 
+Y está alineado con:
+RF-01 a RF-12 
+BPM TO-BE 
+Arquitectura propuesta

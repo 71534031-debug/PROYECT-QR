@@ -1,0 +1,48 @@
+Formato 05:
+Modelo BPM Mejorado (Proceso TO-BE)
+Datos generales del proyecto
+
+Descripción general del proceso
+Describir de manera clara el proceso mejorado, indicando:
+Objetivo del proceso.
+
+Alcance (inicio y fin).
+
+Principales mejoras respecto al proceso actual (AS-IS).
+
+Objetivos de mejora
+Detallar los objetivos que se buscan con el rediseño del proceso (reducción de tiempos, eliminación de actividades innecesarias, mejora en la calidad, mejora en el control del proceso):
+
+Relación Problema-Solución
+
+Diagrama BPM mejorado (TO-BE)
+Inserte el diagrama BPM del proceso mejorado.
+
+Descripción de actividades del proceso
+
+Conclusiones del rediseño
+Redactar un resumen del impacto del proceso mejorado en comparación con el proceso actual.
+
+Evidencias
+Como evidencias del rediseño del proceso se deben adjuntar los siguientes elementos:
+Capturas del diagrama BPM mejorado (TO-BE) elaborado en Lucidchart. 
+Avances del modelado del proceso mejorado, evidenciando la incorporación de automatización y validación digital. 
+Versión final del diagrama BPMN TO-BE, con pools, lanes, compuertas, tareas y flujos correctamente definidos. 
+Comparación visual entre el proceso AS-IS y el proceso TO-BE, para evidenciar las mejoras implementadas. 
+Formato 05 debidamente completado, como parte del informe progresivo del rediseño del proceso.
+Sugerencia para tu diagrama TO-BE en Lucidchart
+Compuertas clave
+¿Los datos del participante son válidos y cumple requisitos? 
+¿El certificado existe y es válido? 
+Tareas automáticas del sistema
+Validar datos 
+Generar código único 
+Generar código QR 
+Generar certificado PDF 
+Guardar certificado 
+Validar autenticidad 
+Actores principales
+Personal administrativo 
+Sistema web de certificados 
+Participante 
+Tercero verificador

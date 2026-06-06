@@ -1,0 +1,135 @@
+CICD
+ Flujo CI/CD del Proyecto
+Flujo completo
+Developer → Git Push → Repositorio → CI Checks → Build → Deploy → Producción
+Proceso paso a paso
+El desarrollador realiza cambios en el código 
+Hace commit y push al repositorio (branch main o develop) 
+Se ejecutan validaciones automáticas (CI) 
+Si todo es correcto: 
+Se genera el build 
+Se despliega automáticamente 
+El sistema queda disponible en producción 
+ Checks de Integración Continua (CI)
+Antes del despliegue, el código debe pasar:
+🔹 1. Linting
+Validación de calidad de código 
+Herramienta sugerida: 
+ESLint 
+npm run lint
+🔹 2. Tests
+Actualmente el proyecto no tiene tests automatizados definidos, pero se considera:
+Validación manual (Postman, navegador) 
+Flujo crítico probado: 
+Login 
+Generación de certificados 
+Validación QR 
+Futuro:
+npm test
+🔹 3. Build
+Frontend:
+npm run build
+Backend:
+Validación de ejecución sin errores 
+ Entornos del Sistema
+
+ Plataforma de Despliegue
+🔹 Frontend
+Plataforma: Vercel 
+Configuración: 
+Deploy automático desde repositorio Git 
+Build command:
+npm run build
+Output:
+dist/
+🔹 Backend
+Plataforma: Render 
+Configuración: 
+Tipo: Web Service 
+Build command:
+npm install
+Start command:
+npm start
+Puerto: 
+Definido por variable PORT 
+
+ Variables de Entorno por Entorno
+🔹 Development (.env local)
+PORT=3000
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=local_password
+DB_NAME=certificados_db
+
+JWT_SECRET=dev_secret
+
+EMAIL_USER=dev_email
+EMAIL_PASS=dev_password
+
+NODE_ENV=development
+
+🔹 Staging
+PORT=3000
+
+DB_HOST=staging_host
+DB_USER=staging_user
+DB_PASSWORD=staging_password
+DB_NAME=certificados_db
+
+JWT_SECRET=staging_secret
+
+EMAIL_USER=staging_email
+EMAIL_PASS=staging_password
+
+NODE_ENV=staging
+
+🔹 Production
+PORT=3000
+
+DB_HOST=prod_host
+DB_USER=prod_user
+DB_PASSWORD=prod_password
+DB_NAME=certificados_db
+
+JWT_SECRET=prod_secret
+
+EMAIL_USER=prod_email
+EMAIL_PASS=prod_password
+
+NODE_ENV=production
+
+ Estrategia de Deploy
+🔹 Branching
+
+🔹 Flujo de despliegue
+feature/* → develop → staging 
+develop → pruebas → merge a main 
+main → producción automática 
+Consideraciones Importantes
+Uso obligatorio de HTTPS en producción 
+Variables de entorno configuradas en Vercel y Render 
+No subir .env al repositorio 
+Validar build antes de deploy 
+Logs activos en backend (Render) 
+ Errores Comunes en CI/CD
+Error: Build falla en Vercel
+Causa: dependencias o errores en código
+Solución:
+npm install
+npm run build
+Error: Backend no inicia en Render
+Causa: puerto incorrecto
+Solución:
+Usar variable PORT 
+No hardcodear puertos 
+Error: Variables de entorno no funcionan
+Causa: no configuradas en plataforma
+Solución:
+Agregar manualmente en: 
+Vercel dashboard 
+Render dashboard 
+Error: CORS en producción
+Causa: dominios no permitidos
+Solución:
+Configurar middleware CORS en backend

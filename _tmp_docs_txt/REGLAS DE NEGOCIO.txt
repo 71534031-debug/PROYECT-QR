@@ -1,0 +1,129 @@
+REGLAS_DE_NEGOCIO.md
+Descripción General
+Las reglas de negocio definen las condiciones, restricciones y validaciones que gobiernan el comportamiento del sistema de certificados digitales.
+Estas reglas aseguran consistencia, integridad de datos, seguridad y cumplimiento del proceso definido en el modelo TO-BE.
+Lista de Reglas de Negocio
+ Autenticación y Acceso
+RN-001
+Descripción: Solo usuarios registrados y con credenciales válidas pueden acceder a los módulos internos del sistema. 
+Módulo: Autenticación 
+Si se viola: Error de autenticación / acceso denegado 
+Tipo: Automática
+RN-002
+Descripción: El acceso a funcionalidades debe estar restringido según el rol del usuario (Administrador o Personal administrativo). 
+Módulo: Autenticación / Control de acceso 
+Si se viola: Bloqueo de acceso / mensaje de permisos insuficientes 
+Tipo: Automática 
+Gestión de Actividades
+RN-003
+Descripción: No se puede registrar una actividad académica con datos incompletos o inválidos. 
+Módulo: Actividades 
+Si se viola: Error de validación / observaciones al usuario 
+Tipo: Automática 
+RN-004
+Descripción: No deben existir actividades duplicadas con los mismos datos clave (nombre y fechas). 
+Módulo: Actividades 
+Si se viola: Alerta / advertencia de duplicidad 
+Tipo: Automática 
+👥 Gestión de Participantes
+RN-005
+Descripción: Los participantes deben tener todos los campos obligatorios completos para ser procesados. 
+Módulo: Participantes 
+Si se viola: Registro marcado como inválido / observación 
+Tipo: Automática 
+RN-006
+Descripción: No se deben registrar participantes duplicados dentro de una misma actividad. 
+Módulo: Participantes 
+Si se viola: Alerta / bloqueo de registro duplicado 
+Tipo: Automática 
+RN-007
+Descripción: Solo los participantes que cumplen requisitos (estado “apto”) pueden continuar al proceso de certificación. 
+Módulo: Validación de datos 
+Si se viola: Bloqueo del proceso de certificación 
+Tipo: Automática 
+Gestión de Plantillas
+RN-008
+Descripción: Solo se pueden utilizar plantillas activas para la generación de certificados. 
+Módulo: Plantillas 
+Si se viola: Error / bloqueo de selección 
+Tipo: Automática
+RN-009
+Descripción: Las plantillas deben contener los elementos mínimos necesarios para generar un certificado válido (contenido institucional). 
+Módulo: Plantillas 
+Si se viola: Alerta / no permitir uso de plantilla 
+Tipo: Automática
+Generación de Certificados
+RN-010
+Descripción: Cada certificado generado debe tener un código único irrepetible. 
+Módulo: Certificados 
+Si se viola: Error crítico / bloqueo de generación 
+Tipo: Automática 
+RN-011
+Descripción: Cada certificado debe estar asociado a un participante válido y a una actividad registrada. 
+Módulo: Certificados 
+Si se viola: Error / no generar certificado 
+Tipo: Automática 
+RN-012
+Descripción: No se puede generar un certificado si los datos del participante no han sido previamente validados. 
+Módulo: Certificados / Validación 
+Si se viola: Bloqueo del proceso 
+Tipo: Automática 
+RN-013
+Descripción: El certificado debe generarse utilizando una plantilla previamente seleccionada. 
+Módulo: Certificados 
+Si se viola: Error / proceso incompleto 
+Tipo: Automática 
+Almacenamiento y Trazabilidad
+RN-014
+Descripción: Todo certificado generado debe ser almacenado en la base de datos junto con su información asociada. 
+Módulo: Persistencia 
+Si se viola: Error crítico / inconsistencia de datos 
+Tipo: Automática 
+RN-015
+Descripción: El sistema debe registrar cada emisión de certificado para asegurar trazabilidad. 
+Módulo: Trazabilidad 
+Si se viola: Alerta / registro incompleto 
+Tipo: Automática
+Entrega de Certificados
+RN-016
+Descripción: Solo los certificados generados y almacenados pueden ser enviados o descargados. 
+Módulo: Entrega 
+Si se viola: Error / no disponible para descarga 
+Tipo: Automática 
+Validación de Certificados
+RN-017
+Descripción: La validación de certificados debe realizarse únicamente mediante código único o código QR. 
+Módulo: Validación 
+Si se viola: Error / validación no permitida 
+Tipo: Automática 
+RN-018
+Descripción: Solo los certificados existentes en la base de datos pueden ser considerados válidos. 
+Módulo: Validación 
+Si se viola: Mostrar certificado inválido o no encontrado 
+Tipo: Automática 
+RN-019
+Descripción: El resultado de validación debe mostrar el estado real del certificado (válido o inválido). 
+Módulo: Validación 
+Si se viola: Error de integridad / inconsistencia 
+Tipo: Automática 
+
+Configuración Institucional
+RN-020
+Descripción: Los datos institucionales deben estar configurados antes de generar certificados. 
+Módulo: Configuración 
+Si se viola: Bloqueo del proceso de generación 
+Tipo: Automática 
+Elementos Pendientes
+Definición exacta de qué campos son obligatorios en participantes → [PENDIENTE] 
+Estructura mínima obligatoria de plantilla → [PENDIENTE] 
+Validación de vigencia del certificado (expiración) → [PENDIENTE] 
+Conclusión
+Estas reglas garantizan:
+Integridad de datos 
+Control del proceso 
+Seguridad en la emisión 
+Confiabilidad en la validación 
+Y están alineadas con:
+Proceso TO-BE 
+Requerimientos funcionales 
+Requerimientos no funcionales

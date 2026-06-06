@@ -1,0 +1,125 @@
+Formato 07:
+Requerimientos No Funcionales
+Datos generales del proyecto
+
+Descripción general del sistema
+Describir brevemente el sistema a desarrollar considerando:
+Objetivo del sistema.
+
+Funcionalidades principales.
+
+Relación con los requerimientos funcionales.
+
+Lista de requerimientos no funcionales
+
+Detalle de requerimientos no funcionales
+RNF-01: [Tiempo de respuesta del sistema]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-02: [Control de acceso para usuarios internos]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+
+Justificación:
+
+RNF-03: [Integridad de certificados emitidos]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-04: [Facilidad de uso de la interfaz]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-05: [Tiempo de respuesta del sistema]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-06: [Compatibilidad con navegadores modernos]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-07: [Facilidad de actualización de plantillas y parámetros]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-08: [Consistencia en la generación de certificados]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-09: [Soporte para emisión masiva]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-10: [Protección de datos personales]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-11: [Despliegue en entorno web estándar]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+RNF-12: [Registro de operaciones relevantes]
+Categoría:
+
+Descripción:
+
+Métrica o criterio de aceptación:
+
+Justificación:
+
+Clasificación por atributos de calidad

@@ -1,0 +1,46 @@
+Formato 01:
+Contexto del Sistema o Problema de Software
+Datos generales del proyecto
+
+Identificación del sistema o aplicación de software
+Nombre del sistema o software:
+(Escriba el nombre del sistema que será analizado durante el desarrollo de la asignatura).
+Tipo de sistema:
+Indique el tipo de sistema que se analizará:
+(Ejemplos: sistema web, aplicación móvil, sistema de escritorio, plataforma digital, sistema empresarial, sistema académico).
+Descripción general del sistema:
+Describa de manera general el sistema de software seleccionado. La descripción debe explicar qué tipo de sistema es, qué funciones cumple y cuál es su propósito principal.
+
+Contexto del sistema
+Organización o entorno donde se utiliza el sistema:
+Describa la organización, empresa, institución o entorno donde el sistema es utilizado o podría ser utilizado.
+
+Usuarios del sistema:
+Identifique los tipos de usuarios que interactúan con el sistema.
+(Ejemplo: administrador, operador, cliente, estudiante, docente, usuario final).
+Procesos principales del sistema:
+Describa brevemente los procesos principales que el sistema realiza.
+(Ejemplo: registro de usuarios, gestión de información, generación de reportes, control de inventario, procesamiento de transacciones).
+Identificación del problema
+Situación actual:
+Explique la situación actual relacionada con el sistema o proceso que se está analizando.
+
+Problema identificado:
+Describa el problema principal que afecta al sistema o al proceso actual.
+
+Consecuencias del problema:
+Explique qué efectos o consecuencias genera el problema identificado.
+(Ejemplo: pérdida de información, procesos lentos, errores en los datos, mala experiencia del usuario, falta de control en los procesos).
+Justificación del análisis del sistema
+Explique por qué es importante analizar este sistema desde el punto de vista de pruebas y calidad de software.
+En esta sección se debe argumentar cómo el análisis del sistema permitirá identificar problemas de calidad, defectos o riesgos en el funcionamiento del software.
+
+Alcance inicial del proyecto de pruebas
+Describa brevemente qué partes del sistema podrían ser evaluadas durante el curso mediante actividades de pruebas de software.
+(Ejemplo: funcionalidades principales, procesos críticos del sistema, módulos del sistema, interacción entre componentes).
+Observaciones iniciales del sistema
+Registre cualquier observación inicial que considere relevante sobre el sistema de software seleccionado.
+(Ejemplos: posibles debilidades del sistema, áreas donde podrías existir errores, aspectos de usabilidad o rendimiento que podrían evaluarse).
+Entregable de la sesión
+El presente documento ha sido desarrollado como el primer componente del informe progresivo del proyecto de pruebas y calidad de software, correspondiente al análisis inicial del sistema “Sistema de Certificados Digitales: Generación y Validación Segura en Plataforma Web”.
+Este entregable servirá como base para las siguientes etapas del curso, en las cuales se profundizará en la evaluación de la calidad del sistema, la identificación de riesgos, el diseño de casos de prueba y la validación de funcionalidades críticas del software.

@@ -1,0 +1,48 @@
+Formato 03:
+Diagrama BPM (Modelado del Proceso)
+Datos generales del proyecto
+
+Descripción general del proceso
+Describir brevemente el proceso que será representado en el diagrama BPM, indicando su propósito, alcance (inicio y fin) y contexto.
+
+Diagrama BPM del proceso actual (AS-IS)
+Inserte el diagrama BPM elaborado utilizando notación BPMN (draw.io, Lucidchart, Bizagi modeler, etc.)
+
+
+Elementos BPMN utilizados
+
+Identificación de actores (Pools / Lanes)
+
+Descripción del flujo del proceso
+Describir paso a paso cómo se desarrolla el proceso según el diagrama BPM, explicando la secuencia de actividades, decisiones y participación de actores.
+
+Validación del modelo
+Marque con un aspa (X) si se cumple los enunciados:
+
+Evidencias
+Adjuntar capturas del desarrollo del diagrama (herramienta utilizada, avances, etc.)
+Como evidencias del trabajo realizado para el modelado BPM del proceso actual, se consideran los siguientes elementos:
+Captura del diagrama BPMN elaborado en la herramienta seleccionada, en este caso Lucidchart. 
+Avances del modelado del proceso, mostrando la construcción de pools, lanes, eventos, actividades y compuertas. 
+Versión final del diagrama BPMN del proceso AS-IS, lista para ser incorporada al informe. 
+Flujo textual base del proceso, utilizado como referencia para la construcción del modelo. 
+Formato 03 debidamente completado, como parte del informe progresivo del análisis del sistema. 
+Guía rápida para modelarlo en Lucidchart
+Pools y Lanes:
+Pool 1: CIP – Consejo Departamental de Huancavelica 
+Lane 1: Área responsable del evento 
+Lane 2: Personal administrativo 
+Lane 3: Autoridad institucional 
+Pool 2: Participante 
+Recibe certificado 
+Pool 3: Tercero verificador 
+Solicita validación 
+Recibe confirmación 
+Pool 4: Sistemas 
+Herramienta ofimática / correo 
+Generación de PDF 
+Compuertas XOR:
+¿Cumple requisitos? 
+¿Los datos son correctos? 
+¿El certificado presenta errores?
+

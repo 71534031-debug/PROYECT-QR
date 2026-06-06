@@ -1,0 +1,48 @@
+Formato 08:
+Diagrama de Casos de Uso
+Datos generales del proyecto
+
+Descripción general del sistema
+Describir brevemente el sistema a desarrollar considerando:
+Objetivo del sistema.
+
+Funcionalidades principales.
+
+Relación con los requerimientos funcionales.
+
+Identificación de actores
+
+Identificación de casos de uso
+
+Relación actores-casos de uso
+
+Diagrama de casos de uso
+Insertar aquí el diagrama elaborado con herramienta UML.
+Estructura para dibujarlo en Lucidchart / Draw.io
+Actores (lado izquierdo y derecho):
+Administrador 
+Personal administrativo 
+Participante 
+Tercero verificador 
+Sistema (rectángulo):
+"Sistema de Certificados Digitales"
+Casos de uso dentro:
+Iniciar sesión 
+Registrar actividad 
+Cargar participantes 
+Validar datos 
+Gestionar plantillas 
+Generar certificado 
+Generar código QR 
+Almacenar certificado 
+Descargar certificado 
+Validar certificado 
+Consultar historial 
+Configurar sistema 
+Tip pro (para que te quede como de 20/20):
+Conecta así:
+Administrador → Configurar datos, Gestionar plantillas 
+Administrativo → Todo el proceso interno 
+Participante → Descargar certificado 
+Tercero → Validar certificado
+

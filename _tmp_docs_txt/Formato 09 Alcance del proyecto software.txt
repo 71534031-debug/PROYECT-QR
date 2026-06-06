@@ -1,0 +1,48 @@
+Formato 09:
+Alcance del proyecto software
+Datos generales del proyecto
+
+Contexto del proyecto
+Describir brevemente:
+Problema que se busca resolver.
+
+Objetivo general del sistema.
+
+Usuarios principales.
+
+Entorno de uso (organización / tecnológico).
+
+Objetivos del sistema
+Objetivo general.
+
+Objetivos específicos.
+
+Alcance del proyecto
+Funcionalidades incluidas (IN SCOPE).
+
+Funcionalidades excluidas (OUT OF SCOPE).
+
+Límites del sistema
+Actores externos.
+
+Entradas al sistema.
+
+Salidas al sistema.
+
+Restricciones y supuestos
+Restricciones.
+
+
+
+Supuestos.
+
+Criterios de aceptación del alcance
+Definir criterios que indiquen cuándo el alcance está correctamente delimitado:
+Coherencia con los requerimientos y casos de uso.
+
+Claridad en IN/OUT of scope.
+
+Viabilidad del proyecto.
+
+Ausencia de ambigüedades.
+

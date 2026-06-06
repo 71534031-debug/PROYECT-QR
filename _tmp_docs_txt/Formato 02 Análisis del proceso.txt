@@ -1,0 +1,21 @@
+Formato 02:
+Análisis del proceso
+Datos generales del proyecto
+
+Descripción general del proceso
+Describir de manera clara y breve en qué consiste el proceso analizado, indicando su propósito, contexto y alcance (inicio y fin del proceso).
+
+Diagrama del proceso actual (AS-IS)
+Inserte el diagrama de flujo del proceso actual elaborado con la herramienta seleccionada (draw.io, Lucidchart, Bizagi modeler, etc.)
+
+Lista de actividades del proceso
+
+Identificación de actores
+
+Relación actividades-actores
+
+Observaciones del proceso
+Registrar observaciones relevantes sobre el proceso actual (ineficiencias, redundancias, puntos críticos, etc.), sin proponer soluciones.
+
+Evidencias
+Adjuntar capturas de pantalla, diagramas o cualquier evidencia del trabajo realizado durante la práctica.

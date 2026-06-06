@@ -1,0 +1,243 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+Documento de requerimientos de software
+
+ [Sistema de Certificados Digitales: Generación y Validación Segura en Plataforma Web]
+Fecha: [01/04/2026]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tabla de contenido
+
+
+Historial de Versiones
+Información del Proyecto
+Aprobaciones
+
+
+
+
+
+Propósito 
+El presente documento especifica los requerimientos del software denominado “Sistema de Certificados Digitales: Generación y Validación Segura en Plataforma Web”, versión 1.0. El objetivo de este documento es definir de manera clara, estructurada y verificable las características funcionales y no funcionales que debe cumplir la solución propuesta para apoyar el proceso institucional de emisión y validación de certificados digitales.
+
+Este documento cubre la totalidad del sistema, incluyendo los módulos de autenticación de usuarios internos, gestión de actividades académicas, carga y validación de participantes, administración de plantillas, generación automática de certificados en PDF, generación de código único y código QR, almacenamiento de certificados emitidos, entrega o descarga del documento y validación pública en línea.
+
+Asimismo, este documento servirá como base para el análisis, diseño, desarrollo, pruebas y validación del software, así como para mantener coherencia con los modelos de procesos y requerimientos previamente definidos.
+Alcance del producto / Software 
+El sistema a desarrollar consiste en una plataforma web orientada a automatizar la emisión y validación de certificados digitales en el Colegio de Ingenieros del Perú – Consejo Departamental de Huancavelica, específicamente como apoyo a los procesos del Área IEPI.
+
+Su propósito general es reemplazar el procedimiento manual o semi manual de generación de certificados por un proceso digital, controlado, seguro y verificable. El software permitirá registrar actividades académicas o institucionales, incorporar participantes manualmente o mediante archivos Excel/CSV, validar datos antes de la emisión, seleccionar plantillas configurables y generar certificados en formato PDF con mecanismos de autenticidad como código único y código QR.
+
+Entre los beneficios principales del sistema se encuentran la reducción de tiempos operativos, disminución de errores humanos, mejora de la trazabilidad documental, fortalecimiento de la seguridad institucional y optimización de la experiencia del usuario final y de los terceros verificadores.
+
+Los objetivos del software se alinean con metas institucionales de modernización administrativa, mejora del control documental, confiabilidad en la emisión de certificados y fortalecimiento de la atención a los usuarios. Como alcance actual, el sistema cubre la emisión y validación de certificados dentro del entorno institucional; las posibles integraciones con plataformas externas, como Moodle o WordPress, se consideran alcance futuro.
+
+Referencias
+
+Las siguientes referencias complementan la presente especificación de requerimientos:
+
+
+Funcionalidades del producto
+Las funcionalidades principales del software son las siguientes:
+
+Autenticación de usuarios internos. 
+Registro de actividades académicas o institucionales. 
+Carga manual y masiva de participantes. 
+Validación de datos y cumplimiento de requisitos. 
+Gestión de plantillas de certificados. 
+Configuración de datos institucionales. 
+Generación automática de certificados en PDF. 
+Generación de código único y código QR. 
+Almacenamiento y trazabilidad de certificados emitidos. 
+Entrega por descarga o envío por correo electrónico. 
+Validación pública en línea de certificados. 
+Consulta de historial de certificados emitidos.
+Clases y características de usuarios
+Administrador
+Usuario interno con mayor nivel de privilegio. Se encarga de configurar parámetros generales del sistema, gestionar plantillas, actualizar datos institucionales y consultar el historial de certificados. Tiene acceso frecuente a funciones de configuración y control.
+
+Personal Administrativo
+Usuario interno responsable de la operación principal del sistema. Registra actividades, carga de participantes, valida datos, genera certificados y gestiona su entrega. Es el usuario operativo principal del sistema y quien utilizará con mayor frecuencia la plataforma.
+
+Participante
+Usuario externo que recibe su certificado digital y puede descargarlo o utilizar su código para verificar autenticidad. Su interacción con el sistema es puntual y orientada a consulta o descarga.
+
+Tercero verificador 
+Usuario externo que consulta la validez de un certificado mediante código único o código QR. Su interacción es pública y de baja frecuencia, pero crítica para la confiabilidad institucional.
+
+Entorno operativo
+El sistema operará en un entorno web bajo arquitectura cliente-servidor, con los siguientes componentes principales:
+
+Frontend: React
+Backend: Node.js con Express
+Lenguaje principal: JavaScript
+Base de datos: MySQL
+Despliegue fronted: Vercel
+Despliegue backend: Render
+Sistema operativo del usuario: Windows 10 o Windows 11.
+Navegadores: Chrome, Edge, Firefox 
+Navegadores compatibles: Google Chrome, Microsoft Edge y Mozilla Firefox en versiones actuales.
+Conectividad: acceso a internet para operaciones de registro, emisión y validación.
+Herramientas de desarrollo: Cursor como editor y Warp como terminal.
+El sistema debe coexistir con servicios de correo electrónico, librerías de generación de PDF, librerías de QR y el motor de base de datos MySQL.
+
+Requerimientos funcionales
+La plantilla que compartiste organiza los requerimientos funcionales por funcionalidad del producto, incluyendo descripción, prioridad, acciones iniciadoras, comportamiento esperado y lista de requerimientos identificados de forma unívoca.
+
+Gestión de acceso y usuarios internos
+Descripción: Permite autenticar a los usuarios internos autorizados y controlar el acceso según el rol asignado.
+Prioridad: Alta
+
+Acciones iniciadoras y comportamiento esperado:
+El usuario interno accede al módulo de inicio de sesión, ingresa sus credenciales y el sistema valida la información antes de permitir el acceso al panel correspondiente.
+
+Requerimientos funcionales:
+
+REQ-01: El sistema debe permitir que el administrador y el personal administrativo inicien sesión mediante usuario o correo institucional y contraseña.
+REQ-02: El sistema debe validar las credenciales ingresadas contra los registros almacenados.
+REQ-03: El sistema debe restringir el acceso a módulos internos cuando las credenciales sean incorrectas.
+REQ-04: El sistema debe asignar permisos según el rol del usuario autenticado.
+REQ-05: El sistema debe registrar la fecha y hora del inicio de sesión para fines de trazabilidad.
+
+ Gestión de actividades académicas y participantes
+Descripción: Permite registrar actividades y asociar participantes aptos para certificación.
+Prioridad: Alta
+
+Acciones iniciadoras y comportamiento esperado:
+El personal administrativo registra una actividad académica y luego ingresa o importa la lista de participantes. El sistema procesa la información y la deja lista para validación.
+
+Requerimientos funcionales:
+
+REQ-06: El sistema debe permitir registrar actividades académicas o institucionales con datos como nombre, tipo, fecha, descripción y responsable.
+REQ-07: El sistema debe permitir editar la información de una actividad previamente registrada.
+REQ-08: El sistema debe permitir cargar participantes manualmente.
+REQ-09: El sistema debe permitir importar participantes mediante archivos Excel o CSV.
+REQ-10: El sistema debe asociar cada participante a una actividad académica específica.
+REQ-11: El sistema debe detectar registros duplicados durante la carga de participantes.
+REQ-12: El sistema debe validar campos obligatorios como nombres, apellidos, documento, correo y actividad asociada.
+REQ-13: El sistema debe mostrar observaciones cuando existan datos incompletos o inconsistentes.
+REQ-14: El sistema debe permitir corregir registros observados antes de la emisión.
+
+ Gestión de plantillas y configuración institucional
+
+Descripción: Permite administrar plantillas de certificados y parámetros institucionales usados en la emisión.
+Prioridad: Alta
+
+Acciones iniciadoras y comportamiento esperado:
+El administrador o personal autorizado accede al módulo de configuración, selecciona una plantilla o edita parámetros institucionales, y el sistema guarda la configuración para futuras emisiones.
+
+Requerimientos funcionales:
+
+REQ-15: El sistema debe permitir crear plantillas de certificados.
+REQ-16: El sistema debe permitir editar plantillas existentes.
+REQ-17: El sistema debe permitir eliminar plantillas cuando corresponda.
+REQ-18: El sistema debe permitir seleccionar una plantilla para la emisión de certificados.
+REQ-19: El sistema debe permitir configurar nombre institucional, logo, firma, cargo y nombre de autoridad.
+REQ-20: El sistema debe aplicar automáticamente los parámetros institucionales vigentes en nuevas emisiones.
+REQ-21: El sistema debe almacenar las plantillas y configuraciones en la base de datos o en repositorios controlados por el sistema.
+
+Emisión de certificados digitales
+
+Descripción: Permite generar certificados en PDF con mecanismos de autenticidad y almacenar su trazabilidad.
+Prioridad: Alta
+
+Acciones iniciadoras y comportamiento esperado:
+Una vez validados los participantes y seleccionada la plantilla, el sistema genera automáticamente los certificados, asigna un código único, genera el código QR y almacena toda la información en la base de datos para su posterior consulta y validación.
+
+Requerimientos funcionales:
+
+REQ-22: El sistema debe generar automáticamente un certificado en formato PDF para cada participante válido.
+REQ-23: El sistema debe asignar un código único irrepetible a cada certificado emitido.
+REQ-24: El sistema debe generar un código QR asociado a la validación del certificado.
+REQ-25: El sistema debe incorporar en el PDF los datos del participante, actividad, datos institucionales, código único y QR.
+REQ-26: El sistema debe almacenar el certificado y sus metadatos en la base de datos.
+REQ-27: El sistema debe registrar la fecha y hora de emisión de cada certificado.
+REQ-28: El sistema debe impedir la emisión si existen errores de validación pendientes.
+
+Emisión de certificados digitales
+
+Descripción: Permite entregar los certificados a los participantes y validar su autenticidad mediante consulta en línea.
+Prioridad: Alta
+
+Acciones iniciadoras y comportamiento esperado:
+El sistema habilita la descarga o envío del certificado. Posteriormente, el participante o un tercero puede validar el certificado mediante código único o código QR.
+
+Requerimientos funcionales:
+
+REQ-29: El sistema debe permitir enviar certificados por correo electrónico.
+REQ-30: El sistema debe permitir la descarga del certificado desde la plataforma.
+REQ-31: El sistema debe permitir validar un certificado mediante código único.
+REQ-32: El sistema debe permitir validar un certificado mediante código QR.
+REQ-33: El sistema debe mostrar si el certificado es válido o no.
+REQ-34: El sistema debe mostrar datos básicos del certificado validado.
+REQ-35: El sistema debe permitir consultar historial de certificados mediante filtros.
+
+Reglas de negocio
+Solo se emitirán certificados a participantes que cumplan requisitos. 
+Cada certificado debe tener un código único irrepetible. 
+Todo certificado debe ser validable por QR o código único. 
+Solo usuarios internos autorizados pueden emitir certificados. 
+Un participante no debe recibir más de un certificado por actividad (salvo reemisión). 
+Se debe usar una plantilla institucional válida. 
+Todo certificado debe registrarse en la base de datos. 
+Certificados inválidos no deben aparecer como válidos. 
+Cambios institucionales aplican solo a nuevas emisiones. 
+La validación pública debe consultar el registro oficial del sistema.
+Requerimientos de interfaces externas
+Interfaces de usuario
+La interfaz del sistema será web, responsiva y orientada a usuarios internos y externos. Debe mantener consistencia visual, navegación clara, formularios organizados, validaciones visibles y mensajes comprensibles. Se consideran interfaces principales:
+Pantalla de inicio de sesión.
+Panel principal administrativo.
+Módulo de registro de actividades.
+Módulo de carga manual y masiva de participantes.
+Módulo de gestión de plantillas.
+Módulo de generación y consulta de certificados.
+Pantalla pública de validación de certificados.
+Pantalla de descarga o consulta del certificado.
+Interfaces de hardware
+El sistema debe operar sobre computadoras de escritorio o portátiles con navegador web moderno y conexión a internet. No requiere hardware especializado obligatorio. Puede interactuar indirectamente con: Impresoras, en caso de impresión del PDF. Cámaras de dispositivos móviles, para lectura de código QR. Equipos de cómputo institucionales con acceso a la red.
+Interfaces de software
+El sistema interactuará con los siguientes componentes de software: Frontend React para la interfaz de usuario. Backend Node.js con Express para lógica de negocio y API. Base de datos MySQL para persistencia. Librerías de generación de PDF. Librerías de generación de códigos QR. Servicio de correo electrónico para envío de certificados. Despliegue en Vercel y Render. Las integraciones con Moodle o WordPress quedan definidas como posibilidad de evolución futura y no forman parte obligatoria del alcance actual.
+Interfaces de comunicación
+La comunicación entre cliente y servidor debe realizarse mediante HTTP/HTTPS, privilegiando HTTPS para proteger datos y credenciales. El sistema debe admitir: Solicitudes web para formularios y consultas. Consumo de API REST entre frontend y backend. Envío de correos electrónicos para distribución de certificados. Lectura de código QR como mecanismo de acceso rápido a la validación pública. Intercambio de archivos Excel/CSV para importación de participantes.
+Requerimientos no funcionales
+La plantilla define esta sección para documentar criterios de operación del servicio que complementan a los requerimientos funcionales. Rendimiento: El tiempo de respuesta para operaciones comunes no debe superar los 3 segundos en condiciones normales de uso. Seguridad de acceso: Solo usuarios autenticados y autorizados podrán acceder a módulos administrativos. Integridad documental: Cada certificado debe poseer código único irrepetible y QR funcional. Usabilidad: La interfaz debe ser comprensible para personal administrativo sin capacitación técnica avanzada. Disponibilidad: El módulo de validación pública debe alcanzar una disponibilidad mínima del 95% mensual. Compatibilidad: El sistema debe funcionar correctamente en Chrome, Edge y Firefox. Mantenibilidad: Las plantillas y parámetros institucionales deben actualizarse desde panel administrativo sin alterar el código fuente. Fiabilidad: El 100% de certificados emitidos debe contener los campos obligatorios definidos por la plantilla. Escalabilidad: El sistema debe procesar al menos 100 certificados por lote sin fallos críticos. Protección de datos: Las contraseñas deben almacenarse cifradas y las comunicaciones deben emplear HTTPS. Portabilidad: El sistema debe poder desplegarse en Vercel y Render. Trazabilidad: Deben registrarse operaciones críticas como inicio de sesión, emisión y validación.
+Otros requerimientos
+11.1	Base de datos
+El sistema debe utilizar MySQL como gestor de base de datos. Debe existir una estructura relacional que permita almacenar usuarios internos, actividades, participantes, plantillas, certificados emitidos y registros de validación. La base de datos debe preservar integridad referencial entre actividades, participantes y certificados.
+11.2	Legales
+El sistema debe resguardar la información personal de los participantes conforme a principios de confidencialidad e integridad. El acceso a funciones críticas debe quedar restringido a usuarios autorizados. La institución debe mantener control sobre la emisión oficial de certificados.
+11.3	Respaldo
+Debe contemplarse respaldo periódico de la base de datos.
+Los certificados emitidos y registros asociados deben poder recuperarse ante incidentes controlados.
+11.4	Evolución
+La arquitectura debe facilitar futuras mejoras y ampliaciones.
+Se debe prever la posibilidad de integrar el sistema con otras plataformas institucionales en etapas posteriores.
+El diseño debe permitir agregar nuevos tipos de plantillas o reglas de emisión sin rediseño completo del sistema.
+Glosario
+

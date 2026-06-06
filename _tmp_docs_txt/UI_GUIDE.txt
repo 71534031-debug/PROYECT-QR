@@ -1,0 +1,120 @@
+UI_GUIDE
+ Paleta de Colores
+No definida en los documentos → [PROPUESTA] basada en contexto institucional (ingeniería, formalidad, confianza)
+ Tipografía
+ No definida → [PROPUESTA]
+Fuente principal: Inter 
+Fuente fallback: Arial, sans-serif 
+Jerarquía
+
+Componentes Reutilizables
+🔘 Botones
+Tipos:
+PrimaryButton → acción principal (guardar, generar) 
+SecondaryButton → acciones secundarias 
+DangerButton → eliminar / acciones críticas 
+Estados:
+Normal 
+Hover 
+Disabled 
+Loading 
+ Formularios
+Componentes:
+InputText 
+InputEmail 
+InputPassword 
+Select 
+FileUpload (CSV/Excel) 
+TextArea 
+Validaciones:
+Mostrar errores debajo del campo 
+Campos obligatorios marcados con (*) 
+ Tablas
+Uso:
+Listado de certificados 
+Participantes 
+Actividades 
+Características:
+Paginación 
+Filtros 
+Ordenamiento 
+Estado vacío (“No hay registros”) 
+ Modales
+Uso:
+Confirmaciones (eliminar, generar) 
+Vista previa de certificado 
+Mensajes importantes 
+Tipos:
+ConfirmModal 
+AlertModal 
+SuccessModal 
+Notificaciones
+Uso:
+Éxito → verde 
+Error → rojo 
+Información → azul 
+Implementación sugerida:
+Toast notifications (ej. SweetAlert2) 
+ Layout Base
+[PROPUESTA]
+Estructura:
+Header (logo + usuario)
+Sidebar (menú)
+Main Content (pantalla)
+Footer (opcional)
+Sidebar incluye:
+Dashboard 
+Actividades 
+Participantes 
+Certificados 
+Configuración 
+Convenciones de Nomenclatura
+Componentes React
+PascalCase
+Ejemplo: 
+PrimaryButton.jsx
+CertificateTable.jsx
+LoginForm.jsx
+Archivos
+Componentes → PascalCase 
+Hooks → camelCase (useAuth.js) 
+Servicios → camelCase (apiService.js) 
+
+Clases CSS
+ [PROPUESTA] con metodología simple tipo BEM
+.button-primary
+.form-input
+.table-container
+.modal-header
+
+Comportamiento Responsive
+No definido → [PROPUESTA]
+Breakpoints
+
+Adaptaciones
+Mobile
+Sidebar → colapsado (hamburger menu) 
+Tablas → scroll horizontal 
+Formularios → una sola columna 
+Desktop
+Sidebar fijo 
+Tablas completas 
+Formularios en grid 
+Comportamiento de UX Clave
+Mostrar loading en procesos largos (generación PDF) 
+Confirmación antes de acciones críticas 
+Feedback inmediato (éxito/error) 
+Validaciones en tiempo real en formularios 
+Evitar recargas completas (SPA) 
+Estados del Sistema
+Cada vista debe manejar:
+Loading 
+Error 
+Vacío 
+Éxito 
+Consistencia con el Sistema
+La UI debe reflejar:
+Formalidad institucional 
+Claridad en procesos administrativos 
+Rapidez en validación de certificados 
+Enfoque en eficiencia operativa

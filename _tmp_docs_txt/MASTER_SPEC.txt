@@ -1,0 +1,69 @@
+MASTER_SPEC
+Resumen del Sistema
+Sistema web para la generación y validación segura de certificados digitales, que automatiza el registro de actividades, carga de participantes y emisión de certificados en PDF con código único y QR.
+Permite validación pública en línea, garantizando autenticidad, trazabilidad y eficiencia operativa.
+Está diseñado bajo arquitectura cliente-servidor y orientado a procesos institucionales del Colegio de Ingenieros del Perú – CD Huancavelica.
+Actores y Roles
+Módulos del Sistema
+
+ Stack Tecnológico
+Frontend
+React 
+Backend
+Node.js 
+Express 
+Base de datos
+MySQL 
+Servicios
+Generación de PDF 
+Generación de código QR 
+Servicio de correo (SMTP/API) 
+Infraestructura
+Vercel (frontend) 
+Render (backend) 
+Restricciones Técnicas Importantes
+Arquitectura cliente-servidor en capas (N-tier) 
+Backend monolítico modular 
+Uso obligatorio de React, Node.js y MySQL 
+Dependencia de servicios en la nube (Vercel y Render) 
+Sistema 100% web (no offline) 
+Sin microservicios en esta versión 
+Generación de certificados debe soportar emisión masiva (~100 registros) 
+Tiempo de respuesta máximo: 3 segundos 
+Seguridad básica: autenticación + HTTPS + control de acceso 
+ Convenciones de Código
+API basada en REST 
+Uso de JSON para intercambio de datos 
+Estructura modular por dominios (auth, actividades, certificados, etc.) 
+Nombres de endpoints en snake_case o kebab-case consistentes 
+Identificadores únicos para certificados (no reutilizables) 
+Validaciones obligatorias en backend (no confiar en frontend) 
+Manejo de errores estandarizado (HTTP status codes) 
+Separación de capas: 
+Controladores (request/response) 
+Servicios (lógica de negocio) 
+Modelos (base de datos) 
+Logs para trazabilidad (acciones críticas) 
+
+ Documentos de Especificación
+Este documento se apoya en los siguientes archivos del proyecto:
+MODELO_DE_DATOS.md → Estructura de base de datos y relaciones 
+REGLAS_DE_NEGOCIO.md → Lógica que gobierna el sistema 
+API_SPEC.md → Definición de endpoints REST 
+USER_FLOWS.md → Flujo lógico de interacción del usuario 
+CRITERIOS_ACEPTACION.md → Validación funcional en formato BDD 
+Formato 05 → Proceso TO-BE (BPM) 
+Formato 06 → Requerimientos funcionales 
+Formato 07 → Requerimientos no funcionales 
+Formato 08 → Casos de uso 
+Formato 09 → Alcance del sistema 
+Formato 11 → Arquitectura del sistema 
+Plan de Pruebas → Estrategia de validación 
+ Uso del Documento
+Este documento es el punto de entrada para agentes de desarrollo basados en IA (SSD).
+Define el contexto global, límites técnicos y organización del sistema.
+ Cualquier generación de código debe respetar:
+Los requerimientos funcionales (RF-01 a RF-12) 
+Las reglas de negocio 
+El modelo de datos 
+Los criterios de aceptación

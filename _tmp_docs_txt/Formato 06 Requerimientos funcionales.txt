@@ -1,0 +1,156 @@
+Formato 06:
+Requerimientos Funcionales
+Datos generales del proyecto
+
+Descripción general del sistema
+Describir brevemente el sistema a desarrollar considerando:
+Objetivo del sistema.
+
+Usuarios principales.
+
+Relación con el proceso TO-BE.
+
+Lista de requerimientos funcionales
+
+Detalle de requerimientos funcionales
+RF-01: [Autenticar usuarios internos]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Flujo alternativo:
+
+Postcondiciones:
+
+RF-02: [Registrar actividad académica]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Flujo alternativo:
+
+Postcondiciones:
+
+RF-03: [Cargar participantes]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-04: [Validar datos de participantes]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Flujo alternativo:
+
+Postcondiciones:
+
+RF-05: [Gestionar plantillas de certificados]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-06: [Generar certificado digital PDF]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-07: [Generar código único y QR]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-08: [Almacenar certificados emitidos
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-09: [Enviar o habilitar descarga del certificado]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-10: [Validar certificado en línea]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Flujo alternativo:
+
+Postcondiciones:
+
+RF-11: [Consultar historial de certificados]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+RF-12: [Configurar datos institucionales]
+Descripción:
+
+Actor principal:
+
+Precondiciones:
+
+Flujo principal:
+
+Postcondiciones:
+
+Trazabilidad con el proceso TO-BE

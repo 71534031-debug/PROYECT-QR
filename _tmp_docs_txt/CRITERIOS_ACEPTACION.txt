@@ -1,0 +1,119 @@
+ CRITERIOS_ACEPTACION.md
+ Descripción General
+Este documento define los criterios de aceptación de los requerimientos funcionales del sistema utilizando formato BDD (Behavior Driven Development).
+Cada requerimiento incluye al menos un escenario exitoso y uno de error.
+ RF-01: Autenticar usuarios internos
+Escenario feliz
+Dado que el usuario está registrado y activo
+Cuando ingresa su correo y contraseña correctos
+Entonces el sistema le permite acceder al sistema según su rol
+ Escenario de error
+Dado que el usuario no tiene credenciales válidas
+Cuando intenta iniciar sesión
+Entonces el sistema muestra un mensaje de error y deniega el acceso
+RF-02: Registrar actividad académica
+Escenario feliz
+Dado que el usuario está autenticado
+Cuando registra una actividad con todos los datos requeridos
+Entonces el sistema guarda la actividad correctamente
+Escenario de error
+Dado que el usuario omite campos obligatorios
+Cuando intenta registrar la actividad
+Entonces el sistema muestra observaciones y no guarda la actividad
+RF-03: Cargar participantes
+ Escenario feliz
+Dado que existe una actividad registrada
+Cuando el usuario carga participantes correctamente (manual o archivo válido)
+Entonces el sistema registra los participantes asociados a la actividad Escenario de error
+Dado que el archivo contiene datos inválidos
+Cuando el usuario intenta importar participantes
+Entonces el sistema muestra errores y no procesa los registros incorrectos
+RF-04: Validar datos de participantes Escenario feliz
+Dado que los datos de los participantes están completos
+Cuando el sistema ejecuta la validación
+Entonces marca los registros como válidos
+Escenario de error
+Dado que existen datos incompletos o incorrectos
+Cuando el sistema valida los participantes
+Entonces marca observaciones y bloquea registros inválidos
+RF-05: Gestionar plantillas de certificados
+Escenario feliz
+Dado que el usuario tiene permisos
+Cuando crea o edita una plantilla correctamente
+Entonces el sistema guarda la plantilla disponible para uso
+Escenario de error
+Dado que la plantilla no cumple condiciones mínimas
+Cuando el usuario intenta guardarla
+Entonces el sistema muestra error y no permite su registro
+RF-06: Generar certificado digital PDF
+Escenario feliz
+Dado que existen participantes válidos y plantilla seleccionada
+Cuando el sistema genera certificados
+Entonces crea archivos PDF correctamente
+Escenario de error
+Dado que no existe plantilla o datos válidos
+Cuando se intenta generar el certificado
+Entonces el sistema muestra error y no genera el PDF
+RF-07: Generar código único y QR
+Escenario feliz
+Dado que se genera un certificado
+Cuando el sistema procesa el registro
+Entonces asigna un código único y genera su código QR
+Escenario de error
+Dado que ocurre un fallo en la generación
+Cuando el sistema intenta asignar código o QR
+Entonces detiene el proceso y muestra error
+RF-08: Almacenar certificados emitidos
+ Escenario feliz
+Dado que el certificado ha sido generado
+Cuando el sistema guarda la información
+Entonces registra el certificado en la base de datos
+ Escenario de error
+Dado que ocurre un fallo en la base de datos
+Cuando el sistema intenta almacenar el certificado
+Entonces muestra error y no registra el certificado
+ RF-09: Enviar o habilitar descarga
+ Escenario feliz
+Dado que el certificado existe
+Cuando el sistema habilita su entrega
+Entonces el participante puede descargar o recibir el certificado
+ Escenario de error
+Dado que el certificado no está disponible
+Cuando el usuario intenta descargarlo
+Entonces el sistema muestra error y bloquea la acción
+RF-10: Validar certificado en línea
+ Escenario feliz
+Dado que el usuario ingresa un código válido o escanea un QR
+Cuando el sistema consulta la base de datos
+Entonces muestra que el certificado es válido junto con sus datos
+ Escenario de error
+Dado que el código no existe
+Cuando el usuario intenta validar
+Entonces el sistema muestra que el certificado es inválido o no encontrado
+RF-11: Consultar historial
+Escenario feliz
+Dado que existen certificados registrados
+Cuando el usuario aplica filtros de búsqueda
+Entonces el sistema muestra los resultados correspondientes
+ Escenario de error
+Dado que no existen registros coincidentes
+Cuando el usuario consulta
+Entonces el sistema muestra lista vacía o mensaje informativo
+RF-12: Configurar datos institucionales
+ Escenario feliz
+Dado que el administrador accede a configuración
+Cuando actualiza los datos correctamente
+Entonces el sistema guarda los cambios
+Escenario de error
+Dado que los datos ingresados son inválidos
+Cuando el administrador intenta guardar
+Entonces el sistema muestra error y no guarda los cambios
+ Conclusión
+Este documento permite:
+Validar funcionalidad del sistema 
+Guiar pruebas (manuales o automáticas) 
+Servir como base para desarrollo con IA (SSD) 
+Está alineado con:
+Requerimientos funcionales RF-01 a RF-12 
+Proceso TO-BE 
+Plan de pruebas

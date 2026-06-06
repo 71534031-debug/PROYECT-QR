@@ -1,0 +1,202 @@
+USER_FLOWS.md
+Descripción General
+Este documento describe los flujos de interacción del usuario con el sistema de certificados digitales.
+Se detallan las pantallas, acciones disponibles y comportamiento del sistema según el proceso definido (TO-BE y RF).
+ 1. Pantalla: Inicio de Sesión
+Rol: Administrador / Personal administrativo 
+ Qué ve el usuario:
+Formulario con: 
+Email 
+Contraseña 
+Botón “Iniciar sesión” 
+ Acciones:
+Ingresar credenciales 
+Enviar formulario 
+ Resultado:
+✔ Credenciales válidas → Redirige a Dashboard 
+❌ Credenciales inválidas → Mensaje de error 
+ Estados:
+Cargando → Validando credenciales 
+Error → Credenciales incorrectas 
+Éxito → Acceso concedido 
+2. Pantalla: Dashboard
+Rol: Administrador / Personal administrativo 
+Qué ve:
+Menú de navegación: 
+Actividades 
+Participantes 
+Plantillas 
+Certificados 
+Configuración 
+ Acciones:
+Seleccionar módulo 
+ Resultado:
+Redirección al módulo correspondiente 
+ Estados:
+Normal (no aplica carga crítica) 
+ 3. Pantalla: Gestión de Actividades
+Rol: Personal administrativo 
+ Qué ve:
+Lista de actividades 
+Botón “Registrar actividad” 
+ Acciones:
+Crear nueva actividad 
+Ver listado 
+ Resultado:
+Crear → Formulario de registro 
+Listado → Visualización 
+ Estados:
+Cargando → Lista de actividades 
+Vacío → “No hay actividades” 
+Error → Fallo al cargar 
+Éxito → Lista visible 
+4. Pantalla: Registro de Actividad
+Rol: Personal administrativo 
+ Qué ve:
+Formulario: 
+Nombre 
+Descripción 
+Fechas 
+ Acciones:
+Guardar actividad 
+ Resultado:
+✔ Registro exitoso → Regresa a lista 
+❌ Error → Mostrar observaciones 
+Estados:
+Cargando → Guardando 
+Error → Datos inválidos 
+Éxito → Registro completado 
+5. Pantalla: Gestión de Participantes
+Rol: Personal administrativo 
+ Qué ve:
+Lista de participantes 
+Opciones: 
+Registro manual 
+Carga masiva 
+ Acciones:
+Registrar participante 
+Importar archivo 
+Resultado:
+Registro → Formulario 
+Importación → Procesamiento 
+Estados:
+Cargando → Procesando datos 
+Vacío → Sin participantes 
+Error → Datos incorrectos 
+Éxito → Participantes registrados 
+6. Pantalla: Carga Masiva de Participantes
+Rol: Personal administrativo 
+ Qué ve:
+Campo para subir archivo (Excel/CSV) 
+ Acciones:
+Subir archivo 
+Confirmar carga 
+ Resultado:
+✔ Archivo válido → Regresa con resumen 
+❌ Archivo inválido → Error 
+Estados:
+Cargando → Procesando archivo 
+Error → Formato incorrecto 
+Éxito → Datos cargados 
+ 7. Pantalla: Gestión de Plantillas
+Rol: Administrador / Personal administrativo 
+ Qué ve:
+Lista de plantillas 
+Botón “Nueva plantilla” 
+ Acciones:
+Crear / editar plantilla 
+ Resultado:
+Guardar → Se actualiza lista 
+ Estados:
+Cargando → Lista 
+Vacío → Sin plantillas 
+Error → Fallo 
+Éxito → Plantillas disponibles 
+ 8. Pantalla: Generación de Certificados
+Rol: Personal administrativo 
+Qué ve:
+Selección: 
+Actividad 
+Plantilla 
+ Acciones:
+Generar certificados 
+ Resultado:
+✔ Generación exitosa → Mensaje + registro 
+❌ Error → Mensaje de fallo 
+Estados:
+Cargando → Generando 
+Error → Datos inválidos 
+Éxito → Certificados generados 
+ 9. Pantalla: Historial de Certificados
+Rol: Administrador / Personal administrativo 
+ Qué ve:
+Lista de certificados 
+Filtros (actividad, participante) 
+ Acciones:
+Buscar 
+Ver certificado 
+ Resultado:
+Muestra resultados filtrados 
+ Estados:
+Cargando → Consulta 
+Vacío → Sin resultados 
+Error → Fallo 
+Éxito → Lista visible 
+10. Pantalla: Descarga de Certificado
+Rol: Participante 
+ Qué ve:
+Botón de descarga 
+ Acciones:
+Descargar PDF 
+ Resultado:
+Descarga del archivo 
+ Estados:
+Cargando → Preparando archivo 
+Error → No disponible 
+Éxito → Descarga completada 
+
+ 11. Pantalla: Validación de Certificado
+Rol: Participante / Tercero 
+ Qué ve:
+Campo para ingresar código 
+O acceso vía QR 
+ Acciones:
+Ingresar código 
+Escanear QR 
+Resultado:
+✔ Válido → Mostrar datos del certificado 
+❌ Inválido → Mensaje de error 
+Estados:
+Cargando → Validando 
+Error → Código inválido 
+Éxito → Certificado válido 
+ 12. Pantalla: Configuración Institucional
+Rol: Administrador 
+ Qué ve:
+Formulario: 
+Nombre institución 
+Logo 
+Datos adicionales 
+ Acciones:
+Editar 
+Guardar 
+ Resultado:
+✔ Guardado → Confirmación 
+❌ Error → Mensaje 
+ Estados:
+Cargando → Guardando 
+Error → Fallo 
+Éxito → Configuración actualizada 
+ Elementos Pendientes
+Flujo exacto de recuperación de contraseña → [PENDIENTE] 
+Control de sesión (logout, expiración) → [PENDIENTE] 
+Navegación detallada entre subpantallas → [PENDIENTE] 
+Conclusión
+Este documento define:
+Interacción completa del usuario 
+Flujo de navegación 
+Comportamiento del sistema 
+Y está alineado con:
+BPM TO-BE 
+Casos de uso 
+Requerimientos funcionales 

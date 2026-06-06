@@ -1,0 +1,51 @@
+Formato 11:
+Arquitectura del sistema
+Datos generales del proyecto
+
+Descripción general del sistema
+Describir brevemente:
+Propósito del sistema.
+
+Alcance general.
+
+Usuarios principales.
+
+
+Relación con requerimientos y casos de uso.
+
+Estilo arquitectónico propuesto
+Seleccionar y justificar el estilo arquitectónico
+Cliente-Servidor.
+
+Capas (N-tier).
+
+Microservicios.
+
+Monolítico.
+
+Otros.
+
+Justificación.
+
+Identificación de componentes
+
+Relación entre componentes
+
+Diagrama de Arquitectura conceptual
+Insertar aquí el diagrama del sistema.
+
+Decisiones de diseño
+Registrar decisiones clave tomadas:
+Se utiliza React para el frontend por su capacidad de crear interfaces dinámicas y reutilizables.
+Se emplea Node.js con Express para el backend por su eficiencia en aplicaciones web y facilidad de integración con APIs.
+Se selecciona MySQL como base de datos por su estabilidad, rendimiento y compatibilidad con el entorno académico.
+Restricciones y consideraciones
+Tecnológicas
+
+
+De rendimiento
+
+De seguridad
+
+De escalabilidad
+

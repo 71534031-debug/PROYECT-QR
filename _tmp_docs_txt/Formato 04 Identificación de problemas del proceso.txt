@@ -1,0 +1,38 @@
+Formato 04:
+Identificación de Problemas del Proceso
+Datos generales del proyecto
+
+Descripción general del proceso
+Describir de manera breve el proceso analizado (AS-IS), indicando su propósito, alcance (inicio y fin) y contexto organizacional.
+
+
+
+Listado de problemas identificados
+
+Clasificación de problemas
+Clasificar los problemas según su naturaleza:
+Problemas de tiempo (retrasos, cuellos de botella)
+
+Problemas de calidad (errores, reprocesos)
+
+Problemas de control (falta de supervisión o validación)
+
+Problemas de redundancia (actividades duplicadas)
+
+Otros (especificar)
+
+Análisis de causas
+
+Relación con el diagrama BPM
+Describir en qué parte del diagrama BPM se encuentra cada problema identificado, indicando la actividad o punto del flujo donde ocurre.
+
+Conclusiones del análisis
+Redactar un resumen de los principales problemas encontrados, su impacto en el proceso y la necesidad de mejora.
+
+Evidencias
+Adjuntar capturas del diagrama BPM donde se evidencien los problemas identificados.
+Como evidencias del análisis de problemas del proceso, se deben adjuntar los siguientes elementos:
+Capturas del diagrama BPM actual (AS-IS) donde se identifiquen las actividades en las que ocurren los problemas detectados. 
+Resaltado de compuertas y tareas críticas asociadas a errores, reprocesos, validaciones manuales y demoras. 
+Versión del modelado BPMN en la herramienta utilizada, mostrando el flujo donde se ubican los puntos problemáticos. 
+Documento del presente formato debidamente completado, como parte del informe progresivo del análisis del proceso.

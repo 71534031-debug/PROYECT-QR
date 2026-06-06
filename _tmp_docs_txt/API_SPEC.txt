@@ -1,0 +1,211 @@
+API_SPEC.md
+Descripción General
+Esta especificación define los endpoints del backend del sistema de certificados digitales.
+La API sigue un estilo REST y permite gestionar autenticación, actividades, participantes, certificados y validación pública.
+MÓDULO: AUTENTICACIÓN
+🔹 POST /api/auth/login
+Descripción: Permite autenticar usuarios internos. 
+Autenticación: ❌ No requerida 
+Body
+{
+  "email": "string",
+  "password": "string"
+}
+Response (200)
+{
+  "success": true,
+  "token": "jwt_token",
+  "user": {
+    "id": 1,
+    "nombre": "string",
+    "rol": "ADMIN | ADMINISTRATIVO"
+  }
+}
+Errores
+401 → Credenciales inválidas 
+403 → Usuario inactivo 
+500 → Error del servidor 
+MÓDULO: ACTIVIDADES
+🔹 POST /api/actividades
+Descripción: Registrar actividad académica 
+Autenticación: ✅ Requerida 
+Body
+{
+  "nombre": "string",
+  "descripcion": "string",
+  "fecha_inicio": "date",
+  "fecha_fin": "date"
+}
+Response (201)
+{
+  "success": true,
+  "data": {
+    "id": 1
+  }
+}
+Errores
+400 → Datos inválidos 
+409 → Actividad duplicada 
+401 → No autorizado 
+🔹 GET /api/actividades
+Descripción: Listar actividades 
+Autenticación: ✅ 
+Response (200)
+{
+  "success": true,
+  "data": []
+}
+MÓDULO: PARTICIPANTES
+🔹 POST /api/participantes
+Descripción: Registrar participante manual 
+Autenticación: ✅ 
+Body
+{
+  "nombres": "string",
+  "apellidos": "string",
+  "email": "string",
+  "documento_identidad": "string",
+  "actividad_id": 1
+}
+Response (201)
+{
+  "success": true,
+  "data": {
+    "id": 1
+  }
+}
+Errores
+400 → Datos inválidos 
+409 → Participante duplicado 
+
+🔹 POST /api/participantes/importar
+Descripción: Carga masiva vía Excel/CSV 
+Autenticación: ✅ 
+ Body
+{
+  "archivo": "file",
+  "actividad_id": 1
+}
+Response (200)
+{
+  "success": true,
+  "procesados": 100,
+  "errores": 5
+}
+
+🔹 GET /api/participantes
+Descripción: Listar participantes 
+Autenticación: ✅ 
+ Query
+actividad_id (opcional) 
+ MÓDULO: PLANTILLAS
+🔹 POST /api/plantillas
+Descripción: Crear plantilla 
+Autenticación: ✅ 
+ Body
+{
+  "nombre": "string",
+  "contenido": "string"
+}
+ Response (201)
+{
+  "success": true,
+  "data": {
+    "id": 1
+  }
+}
+🔹 GET /api/plantillas
+Descripción: Listar plantillas 
+Autenticación: ✅ 
+ MÓDULO: CERTIFICADOS
+🔹 POST /api/certificados/generar
+Descripción: Generar certificados automáticamente 
+Autenticación: ✅ 
+📥 Body
+{
+  "actividad_id": 1,
+  "plantilla_id": 1
+}
+📤 Response (200)
+{
+  "success": true,
+  "generados": 50
+}
+Errores
+400 → Datos inválidos 
+404 → Actividad o plantilla no encontrada 
+422 → Participantes no válidos 
+🔹 GET /api/certificados
+Descripción: Consultar historial 
+Autenticación: ✅ 
+Query
+actividad_id (opcional) 
+participante_id (opcional) 
+🔹 GET /api/certificados/:id
+Descripción: Obtener certificado 
+Autenticación: ✅ 
+ Response
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "codigo_unico": "ABC123",
+    "url_pdf": "url"
+  }
+}
+ MÓDULO: ENTREGA
+🔹 GET /api/certificados/:id/descargar
+Descripción: Descargar certificado PDF 
+Autenticación: ❌ [PENDIENTE] 
+Response
+Archivo PDF 
+MÓDULO: VALIDACIÓN PÚBLICA
+🔹 GET /api/validacion
+Descripción: Validar certificado por código 
+Autenticación: ❌ 
+ Query
+codigo_unico 
+ Response (200)
+{
+  "valido": true,
+  "data": {
+    "nombre": "string",
+    "actividad": "string",
+    "fecha": "date"
+  }
+}
+❌ Errores
+404 → No encontrado 
+400 → Código inválido 
+🔹 GET /api/validacion/qr/:codigo
+Descripción: Validar mediante QR 
+Autenticación: ❌ 
+MÓDULO: CONFIGURACIÓN
+🔹 GET /api/configuracion
+Descripción: Obtener datos institucionales 
+Autenticación: ✅ 
+🔹 PUT /api/configuracion
+Descripción: Actualizar datos institucionales 
+Autenticación: ✅ 
+ Body
+{
+  "nombre_institucion": "string",
+  "logo_url": "string"
+}
+ Elementos Pendientes
+Uso de JWT (estructura exacta) → [PENDIENTE] 
+Middleware de roles → [PENDIENTE] 
+Upload real de archivos (multipart/form-data) → [PENDIENTE] 
+Seguridad de descarga pública → [PENDIENTE] 
+
+ Conclusión
+Esta API cubre:
+Autenticación 
+Gestión completa del proceso 
+Generación de certificados 
+Validación pública 
+Y está alineada con:
+RF-01 a RF-12 
+Reglas de negocio 
+Modelo de datos 
+Arquitectura
