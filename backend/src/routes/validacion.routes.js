@@ -1,12 +1,17 @@
 const express = require('express');
+const path = require('path');
 
 async function validarPorCodigo(pool, codigo, req) {
   if (!codigo) return { status: 400, body: { valido: false, message: 'Código inválido' } };
   const [rows] = await pool.query(
-    `SELECT c.id, c.estado, c.fecha_emision, p.nombres, p.apellidos, a.nombre AS actividad
+    `SELECT c.id, c.estado, c.fecha_emision, c.ruta_pdf,
+            p.nombres, p.apellidos, p.tipo_documento, p.numero_documento,
+            a.nombre AS actividad, a.tipo AS actividad_tipo,
+            ci.nombre_institucion, ci.logo_url, ci.cargo_autoridad, ci.nombre_autoridad
      FROM certificados c
      JOIN participantes p ON p.id = c.participante_id
      JOIN actividades a ON a.id = c.actividad_id
+     LEFT JOIN configuracion_institucional ci ON ci.id = 1
      WHERE c.codigo_unico = ? LIMIT 1`,
     [codigo]
   );
@@ -17,13 +22,26 @@ async function validarPorCodigo(pool, codigo, req) {
     [row ? row.id : null, codigo, req.ip || '', req.get('user-agent') || '']
   );
   if (!row) return { status: 404, body: { valido: false, message: 'No encontrado' } };
+  const pdfUrl = row.ruta_pdf ? `/api/entrega/descargar?t=${require('jsonwebtoken').sign({ typ: 'cert_download', certificado_id: row.id }, process.env.JWT_DOWNLOAD_SECRET || process.env.JWT_SECRET || 'dev_secret', { expiresIn: '48h' })}` : null;
   if (row.estado !== 'EMITIDO') {
     return {
       status: 200,
       body: {
         valido: false,
         estado: row.estado,
-        data: { nombre: `${row.nombres} ${row.apellidos}`, actividad: row.actividad, fecha: row.fecha_emision }
+        success: false,
+        message: 'El certificado no está vigente',
+        data: {
+          codigo_unico: codigo,
+          participante_nombres: row.nombres,
+          participante_apellidos: row.apellidos,
+          actividad_nombre: row.actividad,
+          fecha_emision: row.fecha_emision,
+          institucion: row.nombre_institucion,
+          logo_url: row.logo_url,
+          cargo_autoridad: row.cargo_autoridad,
+          nombre_autoridad: row.nombre_autoridad
+        }
       }
     };
   }
@@ -31,7 +49,23 @@ async function validarPorCodigo(pool, codigo, req) {
     status: 200,
     body: {
       valido: true,
-      data: { nombre: `${row.nombres} ${row.apellidos}`, actividad: row.actividad, fecha: row.fecha_emision }
+      success: true,
+      data: {
+        codigo_unico: codigo,
+        participante_nombres: row.nombres,
+        participante_apellidos: row.apellidos,
+        tipo_documento: row.tipo_documento,
+        numero_documento: row.numero_documento,
+        actividad_nombre: row.actividad,
+        actividad_tipo: row.actividad_tipo,
+        fecha_emision: row.fecha_emision,
+        estado: row.estado,
+        pdf_url: pdfUrl,
+        institucion: row.nombre_institucion || 'Institución',
+        logo_url: row.logo_url,
+        cargo_autoridad: row.cargo_autoridad,
+        nombre_autoridad: row.nombre_autoridad
+      }
     }
   };
 }

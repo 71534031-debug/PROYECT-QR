@@ -91,6 +91,10 @@ CREATE TABLE IF NOT EXISTS configuracion_institucional (
   firma_url VARCHAR(512) NULL,
   cargo_autoridad VARCHAR(200) NOT NULL,
   nombre_autoridad VARCHAR(200) NOT NULL,
+  nombre_app VARCHAR(200) NULL DEFAULT 'Sistema QR',
+  email_contacto VARCHAR(254) NULL,
+  telefono_contacto VARCHAR(30) NULL,
+  direccion VARCHAR(255) NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 

@@ -1,46 +1,14 @@
-.plantillas-page {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+.plantillas-page { max-width: 1200px; margin: 0 auto; }
 
-.plantillas-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.plantillas-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.plantillas-subtitle {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin-top: 0.25rem;
-}
-
-.plantillas-content {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1.5rem;
-}
-
-@media (max-width: 1024px) {
-  .plantillas-content {
-    grid-template-columns: 1fr;
-  }
-}
+.plantillas-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 1024px) { .plantillas-content { grid-template-columns: 1fr; } }
 
 .plantillas-form-card {
   background-color: var(--surface);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-lighter);
   height: fit-content;
 }
 
@@ -53,69 +21,43 @@
   border-bottom: 1px solid var(--border-light);
 }
 
-.plantillas-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.plantillas-form .form-group {
-  margin-bottom: 0;
-}
-
-.plantillas-form .form-label {
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.plantillas-form .form-input,
-.plantillas-form .form-textarea {
-  padding: 0.625rem 0.875rem;
-  font-size: 0.875rem;
-}
-
-.plantillas-form .form-textarea {
-  min-height: 120px;
-  font-family: monospace;
-  resize: vertical;
-}
+.plantillas-form { display: flex; flex-direction: column; gap: 1rem; }
+.plantillas-form .form-textarea { resize: vertical; min-height: 200px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 0.8125rem; line-height: 1.6; padding: 1rem; }
 
 .plantillas-help {
   background-color: var(--background);
   border-radius: var(--radius-md);
   padding: 1rem;
-  margin-top: 0.5rem;
+  border: 1px solid var(--border-lighter);
 }
 
-.plantillas-help-title {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
+.plantillas-help-title { font-size: 0.8125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
+
+.plantillas-help-list { display: flex; flex-wrap: wrap; gap: 0.375rem; list-style: none; padding: 0; margin: 0; }
+.plantillas-help-list li { margin: 0; }
+.plantillas-help-list code { font-size: 0.75rem; background-color: var(--surface); color: var(--primary); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-lighter); }
+
+.plantillas-btns { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+
+.plantillas-preview {
+  grid-column: 1 / -1;
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-lighter);
 }
 
-.plantillas-help-list {
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-  padding-left: 1.25rem;
-}
-
-.plantillas-help-list li {
-  margin-bottom: 0.25rem;
-}
-
-.plantillas-submit {
-  margin-top: 0.5rem;
-  width: 100%;
-  padding: 0.75rem;
-  font-weight: 600;
-}
+.plantillas-preview-title { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); }
+.plantillas-preview-content { border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; background-color: white; min-height: 200px; }
 
 .plantillas-list-card {
   background-color: var(--surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-lighter);
   overflow: hidden;
+  height: fit-content;
 }
 
 .plantillas-list-header {
@@ -126,107 +68,30 @@
   align-items: center;
 }
 
-.plantillas-list-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
+.plantillas-list-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
 
 .plantillas-count {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   background-color: var(--background);
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-}
-
-.plantillas-table {
-  width: 100%;
-}
-
-.plantillas-table thead th {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.plantillas-table tbody td {
-  font-size: 0.875rem;
-}
-
-.plantilla-name {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.plantilla-active-badge {
-  display: inline-block;
-  padding: 0.25rem 0.625rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
   font-weight: 500;
 }
 
-.plantilla-active-badge.si {
-  background-color: #d1fae5;
-  color: #047857;
+.plantillas-table { width: 100%; }
+
+.plantilla-name { font-weight: 600; color: var(--text-primary); }
+.plantilla-fecha { color: var(--text-secondary); font-size: 0.8125rem; }
+
+@media (max-width: 480px) {
+  .plantillas-form-card { padding: 1rem; }
+  .plantillas-list-header { padding: 0.75rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .plantillas-btns { flex-direction: column; }
+  .plantillas-btns .btn { width: 100%; }
+  .plantillas-form .form-textarea { min-height: 150px; font-size: 0.75rem; }
 }
 
-.plantilla-active-badge.no {
-  background-color: #f3f4f6;
-  color: #6b7280;
-}
-
-.plantilla-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.plantilla-btn {
-  padding: 0.375rem 0.625rem;
-  font-size: 0.75rem;
-  border-radius: var(--radius-sm);
-}
-
-.plantilla-btn.edit {
-  background-color: #dbeafe;
-  color: #1d4ed8;
-  border: none;
-}
-
-.plantilla-btn.edit:hover {
-  background-color: #bfdbfe;
-}
-
-.plantilla-btn.delete {
-  background-color: #fee2e2;
-  color: var(--danger);
-  border: none;
-}
-
-.plantilla-btn.delete:hover {
-  background-color: #fecaca;
-}
-
-.plantilla-btn.set-active {
-  background-color: #d1fae5;
-  color: #047857;
-  border: none;
-}
-
-.plantilla-btn.set-active:hover {
-  background-color: #a7f3d0;
-}
-
-.plantillas-empty {
-  padding: 3rem;
-  text-align: center;
-  color: var(--text-secondary);
-}
-
-.plantillas-empty svg {
-  width: 3rem;
-  height: 3rem;
-  color: #d1d5db;
-  margin-bottom: 1rem;
+@media (max-width: 375px) {
+  .plantillas-help-list code { font-size: 0.6875rem; padding: 0.125rem 0.375rem; }
 }
