@@ -67,11 +67,12 @@ function createApp(options = {}) {
     const pool = req.app.locals.pool;
     if (!req.file) return res.status(400).json({ success: false, message: 'No se envió ningún archivo' });
     const logoRelPath = path.join('uploads', 'images', req.file.filename).replace(/\\/g, '/');
-    await pool.query(
-      `INSERT INTO configuracion_institucional (id, logo_url) VALUES (1, ?)
-       ON DUPLICATE KEY UPDATE logo_url = VALUES(logo_url)`,
-      [logoRelPath]
-    );
+    const [exist] = await pool.query('SELECT id FROM configuracion_institucional WHERE id = 1 LIMIT 1');
+    if (exist.length > 0) {
+      await pool.query('UPDATE configuracion_institucional SET logo_url = ? WHERE id = 1', [logoRelPath]);
+    } else {
+      await pool.query('INSERT INTO configuracion_institucional (id, logo_url) VALUES (1, ?)', [logoRelPath]);
+    }
     await pool.query(
       `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
        VALUES (?, 'LOGO_ACTUALIZADO', 'configuracion', 1, ?, ?)`,
@@ -100,11 +101,12 @@ function createApp(options = {}) {
     const pool = req.app.locals.pool;
     if (!req.file) return res.status(400).json({ success: false, message: 'No se envió ningún archivo' });
     const firmaRelPath = path.join('uploads', 'images', req.file.filename).replace(/\\/g, '/');
-    await pool.query(
-      `INSERT INTO configuracion_institucional (id, firma_url) VALUES (1, ?)
-       ON DUPLICATE KEY UPDATE firma_url = VALUES(firma_url)`,
-      [firmaRelPath]
-    );
+    const [existF] = await pool.query('SELECT id FROM configuracion_institucional WHERE id = 1 LIMIT 1');
+    if (existF.length > 0) {
+      await pool.query('UPDATE configuracion_institucional SET firma_url = ? WHERE id = 1', [firmaRelPath]);
+    } else {
+      await pool.query('INSERT INTO configuracion_institucional (id, firma_url) VALUES (1, ?)', [firmaRelPath]);
+    }
     await pool.query(
       `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
        VALUES (?, 'FIRMA_ACTUALIZADA', 'configuracion', 1, ?, ?)`,

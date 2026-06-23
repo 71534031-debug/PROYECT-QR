@@ -100,12 +100,11 @@ Autenticación: ✅
 actividad_id (opcional) 
  MÓDULO: PLANTILLAS
 🔹 POST /api/plantillas
-Descripción: Crear plantilla 
+Descripción: Crear plantilla (sin contenido HTML — se usa imagen + campos)
 Autenticación: ✅ 
  Body
 {
-  "nombre": "string",
-  "contenido": "string"
+  "nombre": "string"
 }
  Response (201)
 {
@@ -117,6 +116,65 @@ Autenticación: ✅
 🔹 GET /api/plantillas
 Descripción: Listar plantillas 
 Autenticación: ✅ 
+🔹 GET /api/plantillas/:id
+Descripción: Obtener plantilla con sus campos posicionables 
+Autenticación: ✅ 
+ Response (200)
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "nombre": "string",
+    "imagen_fondo": "ruta/imagen.png",
+    "campos": []
+  }
+}
+🔹 PUT /api/plantillas/:id/campos
+Descripción: Guardar/actualizar posiciones de campos de una plantilla 
+Autenticación: ✅ 
+ Body
+{
+  "campos": [
+    {
+      "placeholder": "NOMBRE_COMPLETO",
+      "x": 50, "y": 30,
+      "font_size": 24, "alignment": "center",
+      "color": "#1a1a2e", "width": 400, "height": 40,
+      "orden": 1
+    }
+  ]
+}
+ Response (200)
+{
+  "success": true,
+  "message": "Campos guardados correctamente"
+}
+Errores
+400 → Faltan placeholders requeridos (lista de 10)
+404 → Plantilla no encontrada
+🔹 GET /api/plantillas/:id/campos
+Descripción: Listar los campos configurados de una plantilla 
+Autenticación: ✅ 
+ Response (200)
+{
+  "success": true,
+  "data": [ ... ]
+}
+🔹 POST /api/plantillas/:id/imagen
+Descripción: Subir imagen de fondo para la plantilla (PNG/JPG, máx 10 MB)
+Autenticación: ✅ 
+ Body (multipart/form-data)
+{
+  "imagen": "file"
+}
+ Response (200)
+{
+  "success": true,
+  "imagen_fondo": "uploads/images/plantilla_uuid.ext"
+}
+Errores
+400 → Archivo no enviado o formato inválido
+404 → Plantilla no encontrada
  MÓDULO: CERTIFICADOS
 🔹 POST /api/certificados/generar
 Descripción: Generar certificados automáticamente 
@@ -195,7 +253,6 @@ Autenticación: ✅
  Elementos Pendientes
 Uso de JWT (estructura exacta) → [PENDIENTE] 
 Middleware de roles → [PENDIENTE] 
-Upload real de archivos (multipart/form-data) → [PENDIENTE] 
 Seguridad de descarga pública → [PENDIENTE] 
 
  Conclusión

@@ -1,6 +1,18 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Actividades from '../pages/Actividades.jsx';
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
+function Wrapper({ children }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>{children}</MemoryRouter>
+    </QueryClientProvider>
+  );
+}
 
 jest.mock('../services/api.js', () => ({
   api: {
@@ -16,14 +28,14 @@ describe('Actividades', () => {
 
   it('muestra error si falla la carga', async () => {
     api.get.mockRejectedValueOnce({ response: { data: { message: 'Fallo' } } });
-    render(<Actividades />);
+    render(<Actividades />, { wrapper: Wrapper });
     await waitFor(() => {
       expect(screen.getByTestId('actividades-error')).toHaveTextContent('Fallo al cargar');
     });
   });
 
   it('renderiza formulario con campos requeridos', () => {
-    render(<Actividades />);
+    render(<Actividades />, { wrapper: Wrapper });
     expect(screen.getByTestId('actividad-form')).toBeInTheDocument();
     expect(screen.getByTestId('actividad-nombre')).toBeInTheDocument();
     expect(screen.getByTestId('actividad-submit')).toBeInTheDocument();
@@ -31,7 +43,7 @@ describe('Actividades', () => {
 
   it('muestra mensaje cuando no hay actividades', async () => {
     api.get.mockResolvedValueOnce({ data: { data: [] } });
-    render(<Actividades />);
+    render(<Actividades />, { wrapper: Wrapper });
     await waitFor(() => {
       expect(screen.getByTestId('actividades-list')).toHaveTextContent('No hay actividades');
     });
@@ -40,7 +52,7 @@ describe('Actividades', () => {
   it('envia formulario al hacer submit', async () => {
     api.get.mockResolvedValueOnce({ data: { data: [] } });
     api.post.mockResolvedValueOnce({ data: {} });
-    render(<Actividades />);
+    render(<Actividades />, { wrapper: Wrapper });
     fireEvent.change(screen.getByTestId('actividad-nombre'), { target: { value: 'Nuevo Curso' } });
     fireEvent.change(screen.getByTestId('actividad-fecha-inicio'), { target: { value: '2026-01-01' } });
     fireEvent.change(screen.getByTestId('actividad-fecha-fin'), { target: { value: '2026-01-02' } });

@@ -156,10 +156,11 @@ function createParticipantesRouter() {
         conn.release();
       }
     }
+    const detalleImport = JSON.stringify({ procesados, errores });
     await pool.query(
       `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, detalle_json, ip, user_agent)
-       VALUES (?, 'IMPORT_PARTICIPANTES', 'actividad', ?, JSON_OBJECT('procesados', ?, 'errores', ?), ?, ?)`,
-      [req.user.id, actividad_id, procesados, errores, req.ip || '', req.get('user-agent') || '']
+       VALUES (?, 'IMPORT_PARTICIPANTES', 'actividad', ?, ?, ?, ?)`,
+      [req.user.id, actividad_id, detalleImport, req.ip || '', req.get('user-agent') || '']
     );
     return res.json({ success: true, procesados, errores });
   });

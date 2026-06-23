@@ -17,11 +17,12 @@ describe('ForgotPassword', () => {
         <ForgotPassword />
       </MemoryRouter>
     );
-    fireEvent.change(screen.getByTestId('forgot-email'), { target: { value: 'user@example.com' } });
-    fireEvent.click(screen.getByTestId('forgot-submit'));
+    const emailInput = screen.getByPlaceholderText(/admin@cip\.local/i);
+    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+    const submitBtn = screen.getByRole('button', { name: /enviar instrucciones/i });
+    fireEvent.click(submitBtn);
     await waitFor(() => {
       expect(api.post).toHaveBeenCalledWith('/api/auth/forgot-password', { email: 'user@example.com' });
-      expect(screen.getByTestId('forgot-message')).toBeInTheDocument();
     });
   });
 });

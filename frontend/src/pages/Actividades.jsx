@@ -180,6 +180,7 @@ export default function Actividades() {
             </div>
           ) : (
             <>
+              <div className="actividades-table-wrapper">
               <table className="table actividades-table">
                 <thead>
                   <tr>
@@ -196,7 +197,7 @@ export default function Actividades() {
                       <motion.tr key={a.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ delay: i * 0.03 }}>
                         <td><strong>{a.nombre}</strong></td>
                         <td><span className={`badge badge-primary`}>{a.tipo}</span></td>
-                        <td className="actividad-fecha">{a.fecha_inicio} — {a.fecha_fin}</td>
+                        <td className="actividad-fecha">{new Date(a.fecha_inicio).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' })} — {new Date(a.fecha_fin).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
                         <td>{a.responsable}</td>
                         <td><span className="badge badge-success">{a.estado || 'Activo'}</span></td>
                       </motion.tr>
@@ -204,6 +205,7 @@ export default function Actividades() {
                   </AnimatePresence>
                 </tbody>
               </table>
+              </div>
               {totalPages > 1 && (
                 <div className="pagination" role="navigation" aria-label="Paginación">
                   <button className="btn btn-sm btn-secondary" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>Anterior</button>

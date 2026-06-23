@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '../services/api.js';
@@ -25,9 +25,11 @@ export default function Certificados() {
   const [page, setPage] = useState(1);
   const [previewItem, setPreviewItem] = useState(null);
   const [selected, setSelected] = useState(new Set());
-  const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
   const debouncedSearch = useDebounce(search);
   const [filterEstado, setFilterEstado] = useState('');
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const modalIframeRef = useRef(null);
 
   const { data: actividades = [] } = useQuery({
     queryKey: ['actividades'],
@@ -45,7 +47,7 @@ export default function Certificados() {
   });
 
   const generarMutation = useMutation({
-    mutationFn: () => api.post('/api/certificados/generar', { actividad_id: Number(actividadId) }),
+    mutationFn: () => api.post('/api/certificados/generar', { actividad_id: Number(actividadId), plantilla_id: 1 }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['certificados', actividadId] });
       toast.success('Certificados generados exitosamente');
@@ -74,8 +76,9 @@ export default function Certificados() {
       const q = debouncedSearch.toLowerCase();
       result = result.filter((c) =>
         c.codigo_unico?.toLowerCase().includes(q) ||
-        c.participante_nombres?.toLowerCase().includes(q) ||
-        c.participante_apellidos?.toLowerCase().includes(q)
+        `${c.participante_nombres || ''} ${c.participante_apellidos || ''}`.toLowerCase().includes(q) ||
+        (c.participante_documento || '').toLowerCase().includes(q) ||
+        (c.actividad_nombre || '').toLowerCase().includes(q)
       );
     }
     if (filterEstado) result = result.filter((c) => c.estado === filterEstado);
@@ -94,10 +97,6 @@ export default function Certificados() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const paged = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
   useEffect(() => { setPage(1); }, [debouncedSearch, filterEstado]);
-
-  useEffect(() => {
-    if (statusMessage.text) { const t = setTimeout(() => setStatusMessage({ type: '', text: '' }), 4000); return () => clearTimeout(t); }
-  }, [statusMessage]);
 
   const selectAll = useCallback((checked) => {
     if (checked) setSelected(new Set(paged.map((c) => c.id)));
@@ -134,7 +133,8 @@ export default function Certificados() {
   const getExportData = useCallback(() => filtered.map((c) => ({
     Código: c.codigo_unico,
     Participante: c.participante_apellidos ? `${c.participante_apellidos}, ${c.participante_nombres}` : '',
-    Documento: c.participante_documento || '',
+    DNI: c.participante_documento || '',
+    Actividad: c.actividad_nombre || '',
     Estado: c.estado || '',
     Emisión: c.created_at ? new Date(c.created_at).toLocaleDateString() : '',
   })), [filtered]);
@@ -152,19 +152,70 @@ export default function Certificados() {
   const handleExportPDF = useCallback(() => {
     exportToPDF(`Certificados-${actividadId}`, (doc) => {
       doc.write('<h1>Lista de Certificados</h1>');
-      doc.write('<table><thead><tr><th>Código</th><th>Participante</th><th>Documento</th><th>Estado</th><th>Emisión</th></tr></thead><tbody>');
+      doc.write('<table><thead><tr><th>Código</th><th>Participante</th><th>DNI</th><th>Actividad</th><th>Estado</th><th>Emisión</th></tr></thead><tbody>');
       for (const c of filtered) {
-        doc.write(`<tr><td>${c.codigo_unico || ''}</td><td>${c.participante_apellidos ? `${c.participante_apellidos}, ${c.participante_nombres}` : ''}</td><td>${c.participante_documento || ''}</td><td>${c.estado || ''}</td><td>${c.created_at ? new Date(c.created_at).toLocaleDateString() : ''}</td></tr>`);
+        doc.write(`<tr><td>${c.codigo_unico || ''}</td><td>${c.participante_apellidos ? `${c.participante_apellidos}, ${c.participante_nombres}` : ''}</td><td>${c.participante_documento || ''}</td><td>${c.actividad_nombre || ''}</td><td>${c.estado || ''}</td><td>${c.created_at ? new Date(c.created_at).toLocaleDateString() : ''}</td></tr>`);
       }
       doc.write('</tbody></table>');
     });
     toast.success('PDF generado para impresión');
   }, [filtered, actividadId, toast]);
 
+  const handleViewPdf = useCallback((cert) => {
+    const token = localStorage.getItem('access_token');
+    if (!token) { toast.error('Sesión no disponible'); return; }
+    window.open(`/api/certificados/${cert.id}/ver?token=${encodeURIComponent(token)}`, '_blank');
+  }, [toast]);
+
+  const handleDownloadPdf = useCallback(async (cert) => {
+    try {
+      const response = await api.get(`/api/certificados/${cert.id}/descargar`, { responseType: 'blob' });
+      const disposition = response.headers['content-disposition'];
+      let filename = `Certificado_${cert.id}.pdf`;
+      if (disposition) {
+        const match = disposition.match(/filename=(.+)/);
+        if (match) filename = match[1].replace(/["']/g, '');
+      }
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('PDF descargado');
+    } catch (err) {
+      toast.error('Error al descargar PDF');
+    }
+  }, [toast]);
+
+  const handleOpenPreview = useCallback(async (cert) => {
+    setPreviewItem(cert);
+    setPdfBlobUrl(null);
+    setPdfLoading(true);
+    try {
+      const response = await api.get(`/api/certificados/${cert.id}/descargar`, { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      setPdfBlobUrl(url);
+    } catch {
+      toast.error('Error al cargar PDF');
+    } finally {
+      setPdfLoading(false);
+    }
+  }, [toast]);
+
+  const handleClosePreview = useCallback(() => {
+    if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
+    setPdfBlobUrl(null);
+    setPreviewItem(null);
+  }, [pdfBlobUrl]);
+
   const SortIcon = ({ column }) => <span className={`sort-icon ${sortBy === column ? 'active ' + sortDir : ''}`}>{sortBy === column ? (sortDir === 'asc' ? '↑' : '↓') : '↕'}</span>;
 
   const statusBadge = (estado) => {
-    const map = { GENERADO: 'badge-success', VIGENTE: 'badge-success', CANCELADO: 'badge-danger', EXPIRADO: 'badge-warning' };
+    const map = { GENERADO: 'badge-success', VIGENTE: 'badge-success', EMITIDO: 'badge-success', CANCELADO: 'badge-danger', REVOCADO: 'badge-danger', EXPIRADO: 'badge-warning' };
     return <span className={`badge ${map[estado] || 'badge-info'}`}>{estado || 'PENDIENTE'}</span>;
   };
 
@@ -180,17 +231,17 @@ export default function Certificados() {
       <div className="certificados-toolbar">
         <div className="table-search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-          <input type="search" placeholder="Buscar por código, nombre..." value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Buscar certificados" disabled={!actividadId} />
+          <input type="search" placeholder="Buscar por código, nombre, DNI o actividad..." value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Buscar certificados" disabled={!actividadId} />
         </div>
         <select className="form-select table-filter" value={filterEstado} onChange={(e) => setFilterEstado(e.target.value)} aria-label="Filtrar por estado" disabled={!actividadId}>
           <option value="">Todos los estados</option>
-          <option value="GENERADO">Generado</option>
-          <option value="VIGENTE">Vigente</option>
+          <option value="EMITIDO">Emitido</option>
+          <option value="REVOCADO">Revocado</option>
           <option value="CANCELADO">Cancelado</option>
           <option value="EXPIRADO">Expirado</option>
         </select>
         <select className="form-select" value={actividadId} onChange={(e) => setActividadId(e.target.value)} aria-label="Seleccionar actividad">
-          <option value="">Todas las actividades</option>
+          <option value="">Seleccionar actividad</option>
           {actividades.map((a) => <option key={a.id} value={a.id}>{a.nombre}</option>)}
         </select>
         <button className="btn btn-primary" onClick={() => generarMutation.mutate()} disabled={!actividadId || generarMutation.isPending}>
@@ -244,11 +295,12 @@ export default function Certificados() {
                     <input type="checkbox" className="table-checkbox" checked={allSelected} onChange={(e) => selectAll(e.target.checked)} aria-label="Seleccionar todos" disabled={paged.length === 0} />
                   </th>
                   <th onClick={() => toggleSort('codigo_unico')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('codigo_unico')}>Código <SortIcon column="codigo_unico" /></th>
-                  <th onClick={() => toggleSort('participante_nombres')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('participante_nombres')}>Participante <SortIcon column="participante_nombres" /></th>
-                  <th>Documento</th>
+                  <th onClick={() => toggleSort('participante_apellidos')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('participante_apellidos')}>Participante <SortIcon column="participante_apellidos" /></th>
+                  <th>DNI</th>
+                  <th onClick={() => toggleSort('actividad_nombre')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('actividad_nombre')}>Actividad <SortIcon column="actividad_nombre" /></th>
+                  <th onClick={() => toggleSort('created_at')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('created_at')}>Fecha Emisión <SortIcon column="created_at" /></th>
                   <th onClick={() => toggleSort('estado')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('estado')}>Estado <SortIcon column="estado" /></th>
-                  <th onClick={() => toggleSort('created_at')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleSort('created_at')}>Emisión <SortIcon column="created_at" /></th>
-                  <th>Acción</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody data-testid="certificados-list">
@@ -258,17 +310,30 @@ export default function Certificados() {
                       <td>
                         <input type="checkbox" className="table-checkbox" checked={selected.has(c.id)} onChange={() => toggleSelect(c.id)} aria-label={`Seleccionar certificado ${c.codigo_unico}`} />
                       </td>
-                      <td className="certificado-codigo">{c.codigo_unico}</td>
+                      <td className="certificado-codigo">{c.codigo_unico ? c.codigo_unico.slice(0, 8) + '...' : '—'}</td>
                       <td className="certificado-participante">
                         {c.participante_apellidos && c.participante_nombres
-                          ? `${c.participante_apellidos}, ${c.participante_nombres}`
+                          ? `${c.participante_nombres} ${c.participante_apellidos}`
                           : '—'}
                       </td>
                       <td className="certificado-doc">{c.participante_documento || '—'}</td>
-                      <td>{statusBadge(c.estado)}</td>
+                      <td className="certificado-actividad">{c.actividad_nombre || '—'}</td>
                       <td className="certificado-fecha">{c.created_at ? new Date(c.created_at).toLocaleDateString() : '—'}</td>
+                      <td>{statusBadge(c.estado)}</td>
                       <td>
-                        <button className="btn btn-sm btn-secondary" onClick={() => setPreviewItem(c)}>Ver</button>
+                        <div className="certificado-acciones">
+                          <button className="btn btn-sm btn-secondary" title="Ver PDF" onClick={() => handleViewPdf(c)} disabled={c.estado !== 'EMITIDO'}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                            Ver PDF
+                          </button>
+                          <button className="btn btn-sm btn-secondary" title="Descargar PDF" onClick={() => handleDownloadPdf(c)} disabled={c.estado !== 'EMITIDO'}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                            Descargar
+                          </button>
+                          <button className="btn btn-sm btn-icon" title="Vista previa" onClick={() => handleOpenPreview(c)} disabled={c.estado !== 'EMITIDO'}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13 12H3" /></svg>
+                          </button>
+                        </div>
                       </td>
                     </motion.tr>
                   ))}
@@ -288,71 +353,43 @@ export default function Certificados() {
 
       <AnimatePresence>
         {previewItem && (
-          <motion.div className="modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPreviewItem(null)}>
-            <motion.div className="modal-content certificados-modal" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={(e) => e.stopPropagation()}>
+          <motion.div className="modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleClosePreview}>
+            <motion.div className="modal-content certificados-preview-modal" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
-                <h3 className="modal-title">Certificado</h3>
-                <button className="modal-close" onClick={() => setPreviewItem(null)} aria-label="Cerrar">×</button>
+                <h3 className="modal-title">
+                  Vista previa — {previewItem.participante_nombres} {previewItem.participante_apellidos}
+                </h3>
+                <button className="modal-close" onClick={handleClosePreview} aria-label="Cerrar">×</button>
               </div>
-              <div className="modal-body">
-                <div className="certificados-modal-info">
-                  <div className="certificados-modal-field">
-                    <span className="certificados-modal-label">Código:</span>
-                    <span className="certificados-modal-value">{previewItem.codigo_unico}</span>
+              <div className="modal-body certificados-preview-body">
+                {pdfLoading ? (
+                  <div className="certificados-preview-loading">
+                    <span className="spinner"></span>
+                    <p>Cargando PDF...</p>
                   </div>
-                  <div className="certificados-modal-field">
-                    <span className="certificados-modal-label">Participante:</span>
-                    <span className="certificados-modal-value">{previewItem.participante_apellidos}, {previewItem.participante_nombres}</span>
+                ) : pdfBlobUrl ? (
+                  <iframe
+                    ref={modalIframeRef}
+                    src={pdfBlobUrl}
+                    className="certificados-preview-iframe"
+                    title="Vista previa del certificado"
+                  />
+                ) : (
+                  <div className="certificados-preview-loading">
+                    <p>No se pudo cargar el PDF</p>
                   </div>
-                  <div className="certificados-modal-field">
-                    <span className="certificados-modal-label">Documento:</span>
-                    <span className="certificados-modal-value">{previewItem.participante_documento || '—'}</span>
-                  </div>
-                  <div className="certificados-modal-field">
-                    <span className="certificados-modal-label">Estado:</span>
-                    <span className="certificados-modal-value">{statusBadge(previewItem.estado)}</span>
-                  </div>
-                  <div className="certificados-modal-field">
-                    <span className="certificados-modal-label">Emisión:</span>
-                    <span className="certificados-modal-value">{previewItem.created_at ? new Date(previewItem.created_at).toLocaleString() : '—'}</span>
-                  </div>
-                  {previewItem.updated_at && (
-                    <div className="certificados-modal-field">
-                      <span className="certificados-modal-label">Última modificación:</span>
-                      <span className="certificados-modal-value">{new Date(previewItem.updated_at).toLocaleString()}</span>
-                    </div>
-                  )}
-                  {previewItem.qr_url && (
-                    <div className="certificados-modal-field">
-                      <span className="certificados-modal-label">QR:</span>
-                      <a href={previewItem.qr_url} target="_blank" rel="noopener noreferrer" className="certificados-modal-link">Descargar QR</a>
-                    </div>
-                  )}
-                  {previewItem.pdf_url && (
-                    <div className="certificados-modal-field">
-                      <span className="certificados-modal-label">PDF:</span>
-                      <a href={previewItem.pdf_url} target="_blank" rel="noopener noreferrer" className="certificados-modal-link">Abrir PDF</a>
-                    </div>
-                  )}
+                )}
+              </div>
+              <div className="modal-footer certificados-preview-footer">
+                <div className="certificados-preview-info">
+                  <span><strong>Código:</strong> {previewItem.codigo_unico}</span>
+                  <span><strong>DNI:</strong> {previewItem.participante_documento || '—'}</span>
+                  <span><strong>Actividad:</strong> {previewItem.actividad_nombre || '—'}</span>
                 </div>
-                <div className="certificados-modal-history">
-                  <h4 className="certificados-history-title">Historial</h4>
-                  <div className="certificados-history-item">
-                    <div className="certificados-history-dot" />
-                    <div className="certificados-history-content">
-                      <span className="certificados-history-action">Creado</span>
-                      <span className="certificados-history-date">{previewItem.created_at ? new Date(previewItem.created_at).toLocaleString() : '—'}</span>
-                    </div>
-                  </div>
-                  {previewItem.updated_at && previewItem.updated_at !== previewItem.created_at && (
-                    <div className="certificados-history-item">
-                      <div className="certificados-history-dot modified" />
-                      <div className="certificados-history-content">
-                        <span className="certificados-history-action">Modificado</span>
-                        <span className="certificados-history-date">{new Date(previewItem.updated_at).toLocaleString()}</span>
-                      </div>
-                    </div>
-                  )}
+                <div className="certificados-preview-actions">
+                  <button className="btn btn-secondary" onClick={handleClosePreview}>Cerrar</button>
+                  <button className="btn btn-primary" onClick={() => { handleClosePreview(); handleViewPdf(previewItem); }}>Abrir en nueva pestaña</button>
+                  <button className="btn btn-primary" onClick={() => { handleClosePreview(); handleDownloadPdf(previewItem); }}>Descargar</button>
                 </div>
               </div>
             </motion.div>

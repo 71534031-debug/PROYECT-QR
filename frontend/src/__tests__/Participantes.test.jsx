@@ -1,6 +1,18 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Participantes from '../pages/Participantes.jsx';
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
+function Wrapper({ children }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>{children}</MemoryRouter>
+    </QueryClientProvider>
+  );
+}
 
 jest.mock('../services/api.js', () => ({
   api: {
@@ -19,7 +31,7 @@ describe('Participantes', () => {
   });
 
   it('renderiza select de actividad y formulario', async () => {
-    render(<Participantes />);
+    render(<Participantes />, { wrapper: Wrapper });
     await waitFor(() => {
       expect(screen.getByTestId('participantes-actividad')).toBeInTheDocument();
       expect(screen.getByTestId('participante-form')).toBeInTheDocument();
@@ -27,7 +39,7 @@ describe('Participantes', () => {
   });
 
   it('invoca POST al crear participante', async () => {
-    render(<Participantes />);
+    render(<Participantes />, { wrapper: Wrapper });
     await waitFor(() => screen.getByTestId('participante-form'));
     fireEvent.change(screen.getByTestId('participantes-actividad'), { target: { value: '1' } });
     fireEvent.change(screen.getByTestId('participante-nombres'), { target: { value: 'Pedro' } });

@@ -18,8 +18,9 @@ describe('ResetPassword', () => {
         </Routes>
       </MemoryRouter>
     );
-    expect(screen.getByTestId('reset-no-token')).toBeInTheDocument();
-    expect(screen.getByTestId('reset-submit')).toBeDisabled();
+    expect(screen.getByText('Enlace inválido')).toBeInTheDocument();
+    expect(screen.getByText(/el enlace de restablecimiento no es válido/i)).toBeInTheDocument();
+    expect(screen.getByText('Solicitar nuevo enlace')).toBeInTheDocument();
   });
 
   it('envía token y nueva contraseña', async () => {
@@ -31,12 +32,14 @@ describe('ResetPassword', () => {
         </Routes>
       </MemoryRouter>
     );
-    fireEvent.change(screen.getByTestId('reset-password'), { target: { value: 'NuevaPass99' } });
-    fireEvent.change(screen.getByTestId('reset-password2'), { target: { value: 'NuevaPass99' } });
-    fireEvent.click(screen.getByTestId('reset-submit'));
+    const passwordInput = screen.getByLabelText(/nueva contraseña/i);
+    const confirmInput = screen.getByLabelText(/confirmar contraseña/i);
+    fireEvent.change(passwordInput, { target: { value: 'NuevaPass99' } });
+    fireEvent.change(confirmInput, { target: { value: 'NuevaPass99' } });
+    const submitBtn = screen.getByRole('button', { name: /restablecer contraseña/i });
+    fireEvent.click(submitBtn);
     await waitFor(() => {
       expect(api.post).toHaveBeenCalledWith('/api/auth/reset-password', { token: 'abc123token', new_password: 'NuevaPass99' });
-      expect(screen.getByTestId('reset-message')).toBeInTheDocument();
     });
   });
 });

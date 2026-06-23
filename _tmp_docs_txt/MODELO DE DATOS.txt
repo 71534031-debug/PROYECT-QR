@@ -15,13 +15,23 @@ Representa a las personas que recibirán certificados.
 4. actividad_participante
 Tabla intermedia que relaciona participantes con actividades.
 
-5. plantillas
+5.  plantillas
 Representa las plantillas de certificados.
+- `imagen_fondo`: URL/ruta de la imagen de fondo subida (PNG/JPG, nullable).
 
-6. certificados
+6.  plantilla_campos
+Representa los campos posicionables de una plantilla con imagen de fondo.
+- `plantilla_id`: FK → plantillas.id
+- `placeholder`: Identificador del campo (ej. NOMBRE_COMPLETO, DOCUMENTO, etc.)
+- `x`, `y`: Coordenadas porcentuales (0-100) para posición en el canvas.
+- `font_size`, `alignment`, `color`: Estilos de texto.
+- `width`, `height`: Tamaño del área del campo en el canvas.
+- `orden`: Orden de tabulación / z-index.
+
+7. certificados
 Representa los certificados generados.
 
-7. configuracion_institucional
+8. configuracion_institucional
 Representa datos globales de la institución.
 
 Relaciones del Sistema
@@ -48,6 +58,7 @@ actividades.id
 participantes.id 
 actividad_participante.id 
 plantillas.id 
+plantilla_campos.id 
 certificados.id 
 configuracion_institucional.id 
 FK (Foreign Keys)
@@ -56,11 +67,11 @@ actividad_participante.participante_id → participantes.id
 certificados.participante_id → participantes.id 
 certificados.actividad_id → actividades.id 
 certificados.plantilla_id → plantillas.id
+plantilla_campos.plantilla_id → plantillas.id (ON DELETE CASCADE)
 Diagrama ERD (Mermaid)
 
 Elementos Pendientes / Ambiguos
 Relación de usuarios con acciones (auditoría) → [PENDIENTE] 
-Estructura interna del contenido de plantillas → [PENDIENTE] 
 Formato exacto del QR (URL / base64 / imagen) → [PENDIENTE] 
 Manejo de estados detallados → [PENDIENTE] 
 

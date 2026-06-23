@@ -86,7 +86,12 @@
   font-weight: 500;
 }
 
-.actividades-table { width: 100%; }
+.actividades-table-wrapper { overflow-x: auto; }
+
+.actividades-table { width: 100%; min-width: 600px; }
+
+.actividades-table thead th:last-child,
+.actividades-table tbody td:last-child { min-width: 100px; white-space: nowrap; }
 
 .actividades-table thead th {
   font-size: 0.75rem;

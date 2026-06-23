@@ -16,10 +16,11 @@ async function validarPorCodigo(pool, codigo, req) {
     [codigo]
   );
   const row = rows[0];
+  const detalle = JSON.stringify({ codigo });
   await pool.query(
     `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, detalle_json, ip, user_agent)
-     VALUES (NULL, 'VALIDACION_PUBLICA', 'certificado', ?, JSON_OBJECT('codigo', ?), ?, ?)`,
-    [row ? row.id : null, codigo, req.ip || '', req.get('user-agent') || '']
+     VALUES (NULL, 'VALIDACION_PUBLICA', 'certificado', ?, ?, ?, ?)`,
+    [row ? row.id : null, detalle, req.ip || '', req.get('user-agent') || '']
   );
   if (!row) return { status: 404, body: { valido: false, message: 'No encontrado' } };
   const pdfUrl = row.ruta_pdf ? `/api/entrega/descargar?t=${require('jsonwebtoken').sign({ typ: 'cert_download', certificado_id: row.id }, process.env.JWT_DOWNLOAD_SECRET || process.env.JWT_SECRET || 'dev_secret', { expiresIn: '48h' })}` : null;

@@ -49,6 +49,7 @@ const Sidebar = memo(function Sidebar({ user, onLogout, isOpen, onClose }) {
           </div>
         </div>
         <nav className="sidebar-nav" aria-label="Navegación principal">
+          <div className="sidebar-section-label">Principal</div>
           <NavLink to="/" end className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -56,6 +57,7 @@ const Sidebar = memo(function Sidebar({ user, onLogout, isOpen, onClose }) {
             </svg>
             Dashboard
           </NavLink>
+          <div className="sidebar-section-label">Gestión</div>
           <NavLink to="/actividades" className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -90,6 +92,7 @@ const Sidebar = memo(function Sidebar({ user, onLogout, isOpen, onClose }) {
             </svg>
             Certificados
           </NavLink>
+          <div className="sidebar-section-label">Sistema</div>
           <NavLink to="/configuracion" className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <circle cx="12" cy="12" r="3" />

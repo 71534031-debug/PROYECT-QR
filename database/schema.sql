@@ -79,9 +79,27 @@ CREATE INDEX idx_ap_actividad ON actividad_participante(actividad_id);
 CREATE TABLE IF NOT EXISTS plantillas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(200) NOT NULL,
-  contenido MEDIUMTEXT NOT NULL,
+  contenido MEDIUMTEXT NULL,
+  imagen_fondo VARCHAR(512) NULL,
   activa TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS plantilla_campos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  plantilla_id INT NOT NULL,
+  placeholder VARCHAR(100) NOT NULL,
+  x FLOAT NOT NULL DEFAULT 50,
+  y FLOAT NOT NULL DEFAULT 50,
+  font_size INT NOT NULL DEFAULT 16,
+  alignment ENUM('left','center','right') NOT NULL DEFAULT 'center',
+  color VARCHAR(20) NOT NULL DEFAULT '#1a1a2e',
+  width FLOAT NOT NULL DEFAULT 200,
+  height FLOAT NOT NULL DEFAULT 30,
+  orden INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (plantilla_id) REFERENCES plantillas(id) ON DELETE CASCADE,
+  UNIQUE KEY uq_plantilla_placeholder (plantilla_id, placeholder)
 );
 
 CREATE TABLE IF NOT EXISTS configuracion_institucional (
