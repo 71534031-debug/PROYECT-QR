@@ -12,7 +12,7 @@ const TABS = [
   { id: 'qr', label: 'QR', icon: 'M12 4V4a8 8 0 018 8v.5M12 20a8 8 0 01-8-8v-.5M4 12a8 8 0 018-8m0 16a8 8 0 01-8-8' },
 ];
 
-const initialForm = { nombre_app: 'Sistema QR', email_contacto: '', telefono_contacto: '', direccion: '' };
+const initialForm = { nombre_institucion: '', cargo_autoridad: '', nombre_autoridad: '', nombre_app: 'Sistema QR', email_contacto: '', telefono_contacto: '', direccion: '' };
 
 export default function Configuracion() {
   const queryClient = useQueryClient();
@@ -45,6 +45,9 @@ export default function Configuracion() {
   useEffect(() => {
     if (config.id) {
       setForm({
+        nombre_institucion: config.nombre_institucion || '',
+        cargo_autoridad: config.cargo_autoridad || '',
+        nombre_autoridad: config.nombre_autoridad || '',
         nombre_app: config.nombre_app || 'Sistema QR',
         email_contacto: config.email_contacto || '',
         telefono_contacto: config.telefono_contacto || '',
@@ -166,6 +169,18 @@ export default function Configuracion() {
           ) : activeTab === 'general' ? (
             <form className="configuracion-general-form" onSubmit={handleSave} noValidate>
               <h3 className="configuracion-section-title">Información General</h3>
+              <div className="form-group">
+                <label className="form-label" htmlFor="nombre_institucion">Nombre de la institución <span className="required">*</span></label>
+                <input id="nombre_institucion" type="text" className="form-input" value={form.nombre_institucion} onChange={handleChange('nombre_institucion')} placeholder="Colegio de Ingenieros del Perú" />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="nombre_autoridad">Nombre de la autoridad <span className="required">*</span></label>
+                <input id="nombre_autoridad" type="text" className="form-input" value={form.nombre_autoridad} onChange={handleChange('nombre_autoridad')} placeholder="Ing. Juan Pérez Pérez" />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="cargo_autoridad">Cargo de la autoridad <span className="required">*</span></label>
+                <input id="cargo_autoridad" type="text" className="form-input" value={form.cargo_autoridad} onChange={handleChange('cargo_autoridad')} placeholder="Decano" />
+              </div>
               <div className="form-group">
                 <label className="form-label" htmlFor="nombre_app">Nombre de la aplicación</label>
                 <input id="nombre_app" type="text" className="form-input" value={form.nombre_app} onChange={handleChange('nombre_app')} />

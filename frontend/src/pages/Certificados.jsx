@@ -164,7 +164,8 @@ export default function Certificados() {
   const handleViewPdf = useCallback((cert) => {
     const token = localStorage.getItem('access_token');
     if (!token) { toast.error('Sesión no disponible'); return; }
-    window.open(`/api/certificados/${cert.id}/ver?token=${encodeURIComponent(token)}`, '_blank');
+    const apiBase = api.defaults.baseURL || '';
+    window.open(`${apiBase}/api/certificados/${cert.id}/ver?token=${encodeURIComponent(token)}`, '_blank');
   }, [toast]);
 
   const handleDownloadPdf = useCallback(async (cert) => {

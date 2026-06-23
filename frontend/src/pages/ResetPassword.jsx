@@ -45,7 +45,7 @@ export default function ResetPassword() {
     setLoading(true);
     setError('');
     try {
-      await api.post('/api/auth/reset-password', { token, password, password_confirmation: confirmPassword });
+      await api.post('/api/auth/reset-password', { token, new_password: password });
       setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.message || 'Error al restablecer la contraseña');
@@ -60,7 +60,7 @@ export default function ResetPassword() {
             <h1 className="forgot-title">Enlace inválido</h1>
             <p className="forgot-subtitle">El enlace de restablecimiento no es válido o ha expirado.</p>
           </div>
-          <Link to="/forgot-password" className="btn btn-primary forgot-submit" style={{ textAlign: 'center', display: 'block' }}>
+          <Link to="/olvide-contrasena" className="btn btn-primary forgot-submit" style={{ textAlign: 'center', display: 'block' }}>
             Solicitar nuevo enlace
           </Link>
         </motion.div>

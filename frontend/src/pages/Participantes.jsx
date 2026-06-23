@@ -93,8 +93,9 @@ export default function Participantes() {
   const SortIcon = ({ column }) => <span className={`sort-icon ${sortBy === column ? 'active ' + sortDir : ''}`}>{sortBy === column ? (sortDir === 'asc' ? '↑' : '↓') : '↕'}</span>;
 
   const estadoBadge = (estado) => {
-    const map = { APTO: 'badge-success', NO_APTO: 'badge-danger', REGISTRADO: 'badge-info' };
-    return <span className={`badge ${map[estado] || 'badge-warning'}`}>{estado || 'Pendiente'}</span>;
+    const map = { APTO: 'badge-success', NO_APTO: 'badge-danger', REGISTRADO: 'badge-info', PENDIENTE_VALIDACION: 'badge-warning', CON_OBSERVACION: 'badge-warning' };
+    const label = { APTO: 'APTO', NO_APTO: 'NO APTO', REGISTRADO: 'Registrado', PENDIENTE_VALIDACION: 'Pendiente Validación', CON_OBSERVACION: 'Con Observación' };
+    return <span className={`badge ${map[estado] || 'badge-warning'}`}>{label[estado] || estado || 'Pendiente'}</span>;
   };
 
   return (
@@ -216,7 +217,7 @@ export default function Participantes() {
                         <button
                           type="button"
                           data-testid={`participante-apto-${p.id}`}
-                          className="participante-btn validate"
+                          className={`participante-btn validate${p.estado_validacion === 'PENDIENTE_VALIDACION' ? ' pending' : ''}`}
                           onClick={() => aptoMutation.mutate(p.id)}
                           disabled={p.estado_validacion === 'APTO' || aptoMutation.isPending}
                         >
