@@ -39,7 +39,8 @@ export default function Configuracion() {
   const resolveUrl = (url) => {
     if (!url) return null;
     if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
-    return `/${url.replace(/^\/+/, '')}`;
+    const apiBase = api.defaults.baseURL || '';
+    return `${apiBase}/${url.replace(/^\/+/, '')}`;
   };
 
   useEffect(() => {
@@ -82,11 +83,14 @@ export default function Configuracion() {
       });
       queryClient.invalidateQueries({ queryKey: ['configuracion'] });
       setLogoProgress(100);
-      if (data.url) setLogoPreview(`/${data.url.replace(/^\/+/, '')}`);
+      if (data.url) {
+        const apiBase = api.defaults.baseURL || '';
+        setLogoPreview(`${apiBase}/${data.url.replace(/^\/+/, '')}`);
+      }
       setTimeout(() => { setLogoUploading(false); toast.success('Logo actualizado exitosamente'); }, 300);
     } catch (err) {
       setLogoUploading(false);
-      toast.error('Error al subir el logo');
+      toast.error(err.response?.data?.message || 'Error al subir el logo');
     }
   }, [queryClient, toast]);
 
@@ -105,11 +109,14 @@ export default function Configuracion() {
       });
       queryClient.invalidateQueries({ queryKey: ['configuracion'] });
       setFirmaProgress(100);
-      if (data.url) setFirmaPreview(`/${data.url.replace(/^\/+/, '')}`);
+      if (data.url) {
+        const apiBase = api.defaults.baseURL || '';
+        setFirmaPreview(`${apiBase}/${data.url.replace(/^\/+/, '')}`);
+      }
       setTimeout(() => { setFirmaUploading(false); toast.success('Firma actualizada exitosamente'); }, 300);
     } catch (err) {
       setFirmaUploading(false);
-      toast.error('Error al subir la firma');
+      toast.error(err.response?.data?.message || 'Error al subir la firma');
     }
   }, [queryClient, toast]);
 
@@ -121,7 +128,7 @@ export default function Configuracion() {
       queryClient.invalidateQueries({ queryKey: ['configuracion'] });
       toast.success('Logo eliminado');
     } catch (err) {
-      toast.error('Error al eliminar el logo');
+      toast.error(err.response?.data?.message || 'Error al eliminar el logo');
     }
   }, [queryClient, toast]);
 
@@ -133,7 +140,7 @@ export default function Configuracion() {
       queryClient.invalidateQueries({ queryKey: ['configuracion'] });
       toast.success('Firma eliminada');
     } catch (err) {
-      toast.error('Error al eliminar la firma');
+      toast.error(err.response?.data?.message || 'Error al eliminar la firma');
     }
   }, [queryClient, toast]);
 

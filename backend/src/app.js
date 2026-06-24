@@ -64,71 +64,91 @@ function createApp(options = {}) {
   });
 
   app.post('/api/configuracion/logo', authenticate, requireRoles('ADMIN'), uploadImage.single('logo'), async (req, res) => {
-    const pool = req.app.locals.pool;
-    if (!req.file) return res.status(400).json({ success: false, message: 'No se envió ningún archivo' });
-    const logoRelPath = path.join('uploads', 'images', req.file.filename).replace(/\\/g, '/');
-    const [exist] = await pool.query('SELECT id FROM configuracion_institucional WHERE id = 1 LIMIT 1');
-    if (exist.length > 0) {
-      await pool.query('UPDATE configuracion_institucional SET logo_url = ? WHERE id = 1', [logoRelPath]);
-    } else {
-      await pool.query('INSERT INTO configuracion_institucional (id, logo_url) VALUES (1, ?)', [logoRelPath]);
+    try {
+      const pool = req.app.locals.pool;
+      if (!req.file) return res.status(400).json({ success: false, message: 'No se envió ningún archivo' });
+      const logoRelPath = path.join('uploads', 'images', req.file.filename).replace(/\\/g, '/');
+      const [exist] = await pool.query('SELECT id FROM configuracion_institucional WHERE id = 1 LIMIT 1');
+      if (exist.length > 0) {
+        await pool.query('UPDATE configuracion_institucional SET logo_url = ? WHERE id = 1', [logoRelPath]);
+      } else {
+        await pool.query('INSERT INTO configuracion_institucional (id, logo_url) VALUES (1, ?)', [logoRelPath]);
+      }
+      await pool.query(
+        `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
+         VALUES (?, 'LOGO_ACTUALIZADO', 'configuracion', 1, ?, ?)`,
+        [req.user.id, req.ip || '', req.get('user-agent') || '']
+      );
+      return res.json({ success: true, url: logoRelPath });
+    } catch (err) {
+      console.error('Error subiendo logo:', err);
+      return res.status(500).json({ success: false, message: 'Error al subir el logo: ' + err.message });
     }
-    await pool.query(
-      `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
-       VALUES (?, 'LOGO_ACTUALIZADO', 'configuracion', 1, ?, ?)`,
-      [req.user.id, req.ip || '', req.get('user-agent') || '']
-    );
-    return res.json({ success: true, url: logoRelPath });
   });
 
   app.delete('/api/configuracion/logo', authenticate, requireRoles('ADMIN'), async (req, res) => {
-    const pool = req.app.locals.pool;
-    const [rows] = await pool.query('SELECT logo_url FROM configuracion_institucional WHERE id = 1 LIMIT 1');
-    if (rows[0]?.logo_url) {
-      const oldPath = path.join(process.cwd(), rows[0].logo_url);
-      if (require('fs').existsSync(oldPath)) require('fs').unlinkSync(oldPath);
+    try {
+      const pool = req.app.locals.pool;
+      const [rows] = await pool.query('SELECT logo_url FROM configuracion_institucional WHERE id = 1 LIMIT 1');
+      if (rows[0]?.logo_url) {
+        const oldPath = path.join(process.cwd(), rows[0].logo_url);
+        if (require('fs').existsSync(oldPath)) require('fs').unlinkSync(oldPath);
+      }
+      await pool.query('UPDATE configuracion_institucional SET logo_url = NULL WHERE id = 1');
+      await pool.query(
+        `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
+         VALUES (?, 'LOGO_ELIMINADO', 'configuracion', 1, ?, ?)`,
+        [req.user.id, req.ip || '', req.get('user-agent') || '']
+      );
+      return res.json({ success: true });
+    } catch (err) {
+      console.error('Error eliminando logo:', err);
+      return res.status(500).json({ success: false, message: 'Error al eliminar el logo: ' + err.message });
     }
-    await pool.query('UPDATE configuracion_institucional SET logo_url = NULL WHERE id = 1');
-    await pool.query(
-      `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
-       VALUES (?, 'LOGO_ELIMINADO', 'configuracion', 1, ?, ?)`,
-      [req.user.id, req.ip || '', req.get('user-agent') || '']
-    );
-    return res.json({ success: true });
   });
 
   app.post('/api/configuracion/firma', authenticate, requireRoles('ADMIN'), uploadImage.single('firma'), async (req, res) => {
-    const pool = req.app.locals.pool;
-    if (!req.file) return res.status(400).json({ success: false, message: 'No se envió ningún archivo' });
-    const firmaRelPath = path.join('uploads', 'images', req.file.filename).replace(/\\/g, '/');
-    const [existF] = await pool.query('SELECT id FROM configuracion_institucional WHERE id = 1 LIMIT 1');
-    if (existF.length > 0) {
-      await pool.query('UPDATE configuracion_institucional SET firma_url = ? WHERE id = 1', [firmaRelPath]);
-    } else {
-      await pool.query('INSERT INTO configuracion_institucional (id, firma_url) VALUES (1, ?)', [firmaRelPath]);
+    try {
+      const pool = req.app.locals.pool;
+      if (!req.file) return res.status(400).json({ success: false, message: 'No se envió ningún archivo' });
+      const firmaRelPath = path.join('uploads', 'images', req.file.filename).replace(/\\/g, '/');
+      const [existF] = await pool.query('SELECT id FROM configuracion_institucional WHERE id = 1 LIMIT 1');
+      if (existF.length > 0) {
+        await pool.query('UPDATE configuracion_institucional SET firma_url = ? WHERE id = 1', [firmaRelPath]);
+      } else {
+        await pool.query('INSERT INTO configuracion_institucional (id, firma_url) VALUES (1, ?)', [firmaRelPath]);
+      }
+      await pool.query(
+        `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
+         VALUES (?, 'FIRMA_ACTUALIZADA', 'configuracion', 1, ?, ?)`,
+        [req.user.id, req.ip || '', req.get('user-agent') || '']
+      );
+      return res.json({ success: true, url: firmaRelPath });
+    } catch (err) {
+      console.error('Error subiendo firma:', err);
+      return res.status(500).json({ success: false, message: 'Error al subir la firma: ' + err.message });
     }
-    await pool.query(
-      `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
-       VALUES (?, 'FIRMA_ACTUALIZADA', 'configuracion', 1, ?, ?)`,
-      [req.user.id, req.ip || '', req.get('user-agent') || '']
-    );
-    return res.json({ success: true, url: firmaRelPath });
   });
 
   app.delete('/api/configuracion/firma', authenticate, requireRoles('ADMIN'), async (req, res) => {
-    const pool = req.app.locals.pool;
-    const [rows] = await pool.query('SELECT firma_url FROM configuracion_institucional WHERE id = 1 LIMIT 1');
-    if (rows[0]?.firma_url) {
-      const oldPath = path.join(process.cwd(), rows[0].firma_url);
-      if (require('fs').existsSync(oldPath)) require('fs').unlinkSync(oldPath);
+    try {
+      const pool = req.app.locals.pool;
+      const [rows] = await pool.query('SELECT firma_url FROM configuracion_institucional WHERE id = 1 LIMIT 1');
+      if (rows[0]?.firma_url) {
+        const oldPath = path.join(process.cwd(), rows[0].firma_url);
+        if (require('fs').existsSync(oldPath)) require('fs').unlinkSync(oldPath);
+      }
+      await pool.query('UPDATE configuracion_institucional SET firma_url = NULL WHERE id = 1');
+      await pool.query(
+        `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
+         VALUES (?, 'FIRMA_ELIMINADA', 'configuracion', 1, ?, ?)`,
+        [req.user.id, req.ip || '', req.get('user-agent') || '']
+      );
+      return res.json({ success: true });
+    } catch (err) {
+      console.error('Error eliminando firma:', err);
+      return res.status(500).json({ success: false, message: 'Error al eliminar la firma: ' + err.message });
     }
-    await pool.query('UPDATE configuracion_institucional SET firma_url = NULL WHERE id = 1');
-    await pool.query(
-      `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent)
-       VALUES (?, 'FIRMA_ELIMINADA', 'configuracion', 1, ?, ?)`,
-      [req.user.id, req.ip || '', req.get('user-agent') || '']
-    );
-    return res.json({ success: true });
   });
 
   app.use('/api/auth', createAuthRouter());
