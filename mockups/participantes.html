@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participantes - Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#f5f5f5}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#1a1a1a;padding:24px;color:#fff}
+    .sidebar .logo{font-size:18px;font-weight:700;color:#C5954C;margin-bottom:32px}
+    .sidebar .logo span{display:block;font-size:11px;font-weight:400;color:#888}
+    .sidebar nav a{display:block;padding:10px 14px;color:#aaa;text-decoration:none;border-radius:8px;font-size:14px;margin-bottom:4px;transition:.2s}
+    .sidebar nav a:hover,.sidebar nav a.active{background:#333;color:#fff}
+    .sidebar nav a.active{color:#C5954C}
+    .main{flex:1;padding:24px 32px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .topbar h1{font-size:22px;color:#1a1a1a}
+    .btn{background:#8B1A1A;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .btn:hover{background:#6e1515}
+    .btn-green{background:#16a34a;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;transition:.2s}
+    .btn-green:hover{background:#15803d}
+    .content{display:flex;gap:24px}
+    .panel{width:360px;background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.06);height:fit-content}
+    .panel h3{font-size:16px;color:#1a1a1a;margin-bottom:16px}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:12px;font-weight:500;color:#888;margin-bottom:4px}
+    .field input,.field select{width:100%;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px}
+    .field input:focus{outline:none;border-color:#8B1A1A}
+    .table-wrap{flex:1}
+    .search-bar{display:flex;gap:10px;margin-bottom:16px}
+    .search-bar input{flex:1;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px}
+    .search-bar input:focus{outline:none;border-color:#8B1A1A}
+    .search-bar select{padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px;color:#555;background:#fff}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;background:#fafafa;border-bottom:1px solid #eee}
+    td{padding:12px 14px;font-size:13px;color:#333;border-bottom:1px solid #f5f5f5}
+    .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+    .badge.apto{background:#dcfce7;color:#16a34a}
+    .badge.pend{background:#fef3c7;color:#d97706}
+    .badge.obs{background:#fce7f3;color:#db2777}
+    .return{position:fixed;top:20px;left:260px;background:#fff;border:1px solid #ddd;padding:6px 14px;border-radius:8px;text-decoration:none;color:#666;font-size:12px;transition:.2s;z-index:10}
+    .return:hover{border-color:#8B1A1A;color:#8B1A1A}
+  </style>
+</head>
+<body>
+  <a class="return" href="index.html">← Volver</a>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="logo">CERTIFICADOS QR<span>Sistema de Gestión</span></div>
+      <nav>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="actividades.html">📋 Actividades</a>
+        <a href="participantes.html" class="active">👥 Participantes</a>
+        <a href="plantillas.html">🎨 Plantillas</a>
+        <a href="certificados.html">📜 Certificados</a>
+        <a href="configuracion.html">⚙️ Configuración</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Participantes</h1>
+        <div style="display:flex;gap:10px"><button class="btn">+ Nuevo</button><button class="btn" style="background:#555">📥 Importar CSV</button></div>
+      </div>
+      <div class="content">
+        <div class="panel">
+          <h3>Registrar Participante</h3>
+          <div class="field"><label>Actividad</label><select><option>Capacitación en Ética</option><option>Conferencia</option></select></div>
+          <div class="field"><label>Nombres</label><input type="text" placeholder="Nombres"></div>
+          <div class="field"><label>Apellidos</label><input type="text" placeholder="Apellidos"></div>
+          <div class="field"><label>Documento</label><input type="text" placeholder="DNI / CE"></div>
+          <div class="field"><label>Email</label><input type="email" placeholder="email@ejemplo.com"></div>
+          <button class="btn" style="width:100%">Registrar</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar participante...">
+            <select><option>Todos</option><option>APTO</option><option>Pendiente</option></select>
+            <select><option>Todas las actividades</option><option>Capacitación</option></select>
+          </div>
+          <table>
+            <thead><tr><th>Nombres</th><th>Apellidos</th><th>Documento</th><th>Actividad</th><th>Estado</th><th>Acción</th></tr></thead>
+            <tbody>
+              <tr><td>Juan Carlos</td><td>Pérez García</td><td>12345678</td><td>Capacitación Ética</td><td><span class="badge apto">APTO</span></td><td><button class="btn-green">Validar</button></td></tr>
+              <tr><td>María Elena</td><td>López Torres</td><td>87654321</td><td>Conferencia</td><td><span class="badge pend">Pendiente</span></td><td><button class="btn-green">Validar</button></td></tr>
+              <tr><td>Carlos Alberto</td><td>Ramírez Silva</td><td>45678912</td><td>Capacitación Ética</td><td><span class="badge obs">Con Obs.</span></td><td><button class="btn-green">Validar</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

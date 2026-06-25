@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockups - Sistema de Certificados QR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #333; padding: 40px; }
+    h1 { color: #8B1A1A; margin-bottom: 8px; }
+    p { color: #666; margin-bottom: 30px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .card {
+      background: #fff; border-radius: 12px; padding: 24px; text-decoration: none; color: inherit;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08); transition: .2s; border: 1px solid #eee;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(139,26,26,.15); border-color: #8B1A1A; }
+    .card .icon { font-size: 32px; margin-bottom: 12px; }
+    .card h3 { font-size: 16px; color: #8B1A1A; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: #888; margin: 0; }
+    .badge { display: inline-block; background: #8B1A1A10; color: #8B1A1A; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-top: 8px; font-weight: 500; }
+    .footer { margin-top: 40px; text-align: center; color: #aaa; font-size: 13px; border-top: 1px solid #eee; padding-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🖼️ Mockups del Sistema</h1>
+  <p>Selecciona una pantalla para ver su maqueta funcional</p>
+  <div class="grid">
+    <a class="card" href="login.html">
+      <div class="icon">🔐</div>
+      <h3>Inicio de Sesión</h3>
+      <p>Formulario de login con validación</p>
+      <span class="badge">Público</span>
+    </a>
+    <a class="card" href="dashboard.html">
+      <div class="icon">📊</div>
+      <h3>Dashboard</h3>
+      <p>Panel principal con estadísticas y gráficos</p>
+      <span class="badge">ADMIN / ADMINISTRATIVO</span>
+    </a>
+    <a class="card" href="actividades.html">
+      <div class="icon">📋</div>
+      <h3>Actividades</h3>
+      <p>CRUD de actividades académicas</p>
+      <span class="badge">ADMIN / ADMINISTRATIVO</span>
+    </a>
+    <a class="card" href="participantes.html">
+      <div class="icon">👥</div>
+      <h3>Participantes</h3>
+      <p>Registro, importación CSV y validación APTO</p>
+      <span class="badge">ADMIN / ADMINISTRATIVO</span>
+    </a>
+    <a class="card" href="plantillas.html">
+      <div class="icon">🎨</div>
+      <h3>Plantillas</h3>
+      <p>Editor visual con canvas drag & drop</p>
+      <span class="badge">ADMIN / ADMINISTRATIVO</span>
+    </a>
+    <a class="card" href="certificados.html">
+      <div class="icon">📜</div>
+      <h3>Certificados</h3>
+      <p>Generación, descarga y revocación</p>
+      <span class="badge">ADMIN / ADMINISTRATIVO</span>
+    </a>
+    <a class="card" href="configuracion.html">
+      <div class="icon">⚙️</div>
+      <h3>Configuración</h3>
+      <p>Logo, firma y datos institucionales</p>
+      <span class="badge">ADMIN</span>
+    </a>
+    <a class="card" href="validar.html">
+      <div class="icon">✅</div>
+      <h3>Validación QR</h3>
+      <p>Validación pública de certificados</p>
+      <span class="badge">Público</span>
+    </a>
+  </div>
+  <div class="footer">Sistema de Generación y Validación de Certificados con Código QR &mdash; Paleta CIP (#8B1A1A · #C5954C)</div>
+</body>
+</html>

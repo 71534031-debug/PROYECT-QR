@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validar Certificado - Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f5f5f5 0%,#e8e0d8 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+    .container{width:100%;max-width:520px}
+    .header{text-align:center;margin-bottom:32px}
+    .header .badge{display:inline-block;background:#8B1A1A;color:#fff;padding:6px 20px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:12px}
+    .header h1{font-size:22px;color:#1a1a1a;margin-bottom:4px}
+    .header p{font-size:14px;color:#888}
+    .card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:6px}
+    .field input{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;transition:.2s}
+    .field input:focus{outline:none;border-color:#8B1A1A;box-shadow:0 0 0 3px rgba(139,26,26,.1)}
+    .actions{display:flex;gap:10px}
+    .actions .btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;text-align:center}
+    .btn-primary{background:#8B1A1A;color:#fff}
+    .btn-primary:hover{background:#6e1515}
+    .btn-secondary{background:#f0f0f0;color:#555}
+    .btn-secondary:hover{background:#e0e0e0}
+    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:#ccc;font-size:12px}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:#eee}
+    .result{margin-top:24px;padding:24px;border-radius:12px;text-align:center}
+    .result.success{background:#f0fdf4;border:1.5px solid #22c55e}
+    .result.error{background:#fef2f2;border:1.5px solid #ef4444}
+    .result .icon{font-size:40px;margin-bottom:8px}
+    .result h3{font-size:18px;margin-bottom:4px}
+    .result.success h3{color:#16a34a}
+    .result p{font-size:13px;color:#666;margin-bottom:6px}
+    .result .data{text-align:left;margin:12px 0;font-size:13px;color:#555;line-height:1.8}
+    .result .data strong{color:#333}
+    .result .btn-download{display:inline-block;margin-top:8px;padding:10px 24px;background:#8B1A1A;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .result .btn-download:hover{background:#6e1515}
+    .return{position:fixed;top:20px;left:20px;background:#fff;border:1px solid #ddd;padding:8px 16px;border-radius:8px;text-decoration:none;color:#666;font-size:13px;transition:.2s;z-index:10}
+    .return:hover{border-color:#8B1A1A;color:#8B1A1A}
+  </style>
+</head>
+<body>
+  <a class="return" href="index.html">← Volver</a>
+  <div class="container">
+    <div class="header">
+      <div class="badge">CIP</div>
+      <h1>Validar Certificado</h1>
+      <p>Ingresa el código único del certificado o escanea el QR</p>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Código único del certificado</label>
+        <input type="text" value="a1b2c3d4-e5f6-7890-abcd-ef1234567890" placeholder="Ej: a1b2c3d4-e5f6...">
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary">✓ Validar</button>
+        <button class="btn btn-secondary">📷 Escanear QR</button>
+      </div>
+      <div class="divider">o escanea el código QR</div>
+      <div style="display:flex;justify-content:center;margin-bottom:8px">
+        <div style="width:140px;height:140px;background:#f5f5f5;border:2px dashed #ddd;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#aaa;flex-direction:column;gap:8px">
+          <span style="font-size:32px">📷</span>
+          <span>Apunta la cámara<br>al código QR</span>
+        </div>
+      </div>
+      <div class="result success">
+        <div class="icon">✅</div>
+        <h3>Certificado Válido</h3>
+        <p>El certificado ha sido verificado exitosamente</p>
+        <div class="data">
+          <strong>Participante:</strong> Juan Pérez García<br>
+          <strong>Actividad:</strong> Capacitación en Ética Profesional<br>
+          <strong>Fecha de emisión:</strong> 01 de junio de 2026<br>
+          <strong>Código:</strong> <span style="font-family:monospace;color:#888">a1b2c3d4-e5f6-7890-abcd-ef1234567890</span>
+        </div>
+        <button class="btn-download">📥 Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

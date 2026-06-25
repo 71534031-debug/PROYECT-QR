@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 240px; background: #1a1a1a; padding: 24px; color: #fff; }
+    .sidebar .logo { font-size: 18px; font-weight: 700; color: #C5954C; margin-bottom: 32px; }
+    .sidebar .logo span { display: block; font-size: 11px; font-weight: 400; color: #888; }
+    .sidebar nav a { display: block; padding: 10px 14px; color: #aaa; text-decoration: none; border-radius: 8px; font-size: 14px; margin-bottom: 4px; transition: .2s; }
+    .sidebar nav a:hover, .sidebar nav a.active { background: #333; color: #fff; }
+    .sidebar nav a.active { color: #C5954C; }
+    .main { flex: 1; padding: 24px 32px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .topbar h1 { font-size: 22px; color: #1a1a1a; }
+    .topbar .user { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #666; }
+    .topbar .user .avatar { width: 36px; height: 36px; border-radius: 50%; background: #8B1A1A; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .card .num { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+    .card .label { font-size: 13px; color: #888; margin-top: 4px; }
+    .card .trend { font-size: 12px; color: #22c55e; margin-top: 6px; }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .chart-box { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .chart-box h3 { font-size: 15px; color: #1a1a1a; margin-bottom: 16px; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 140px; padding-top: 10px; }
+    .bar { flex: 1; border-radius: 4px 4px 0 0; min-height: 8px; background: #8B1A1A; position: relative; transition: .3s; }
+    .bar:hover { opacity: .8; }
+    .bar .val { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #666; }
+    .pie { display: flex; align-items: center; justify-content: center; gap: 30px; }
+    .pie .donut { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#22c55e 0deg 280deg, #f59e0b 280deg 340deg, #ef4444 340deg 360deg); position: relative; }
+    .pie .donut::after { content: ''; position: absolute; width: 70px; height: 70px; border-radius: 50%; background: #fff; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .pie .legend { list-style: none; }
+    .pie .legend li { font-size: 13px; color: #555; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .pie .legend li::before { content: ''; width: 10px; height: 10px; border-radius: 3px; }
+    .return { position: fixed; top: 20px; left: 260px; background: #fff; border: 1px solid #ddd; padding: 6px 14px; border-radius: 8px; text-decoration: none; color: #666; font-size: 12px; transition: .2s; z-index: 10; }
+    .return:hover { border-color: #8B1A1A; color: #8B1A1A; }
+  </style>
+</head>
+<body>
+  <a class="return" href="index.html">← Volver</a>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="logo">CERTIFICADOS QR<span>Sistema de Gestión</span></div>
+      <nav>
+        <a href="dashboard.html" class="active">📊 Dashboard</a>
+        <a href="actividades.html">📋 Actividades</a>
+        <a href="participantes.html">👥 Participantes</a>
+        <a href="plantillas.html">🎨 Plantillas</a>
+        <a href="certificados.html">📜 Certificados</a>
+        <a href="configuracion.html">⚙️ Configuración</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Dashboard</h1>
+        <div class="user"><span>Admin</span><div class="avatar">A</div></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="num">12</div><div class="label">Actividades</div><div class="trend">+3 este mes</div></div>
+        <div class="card"><div class="num">5</div><div class="label">Plantillas</div><div class="trend">2 activas</div></div>
+        <div class="card"><div class="num">450</div><div class="label">Participantes</div><div class="trend">+28 este mes</div></div>
+        <div class="card"><div class="num">380</div><div class="label">Certificados</div><div class="trend">12 revocados</div></div>
+      </div>
+      <div class="charts">
+        <div class="chart-box">
+          <h3>Actividades por Mes</h3>
+          <div class="bar-chart">
+            <div class="bar" style="height:40px"><span class="val">4</span></div>
+            <div class="bar" style="height:60px"><span class="val">6</span></div>
+            <div class="bar" style="height:30px"><span class="val">3</span></div>
+            <div class="bar" style="height:80px"><span class="val">8</span></div>
+            <div class="bar" style="height:50px"><span class="val">5</span></div>
+            <div class="bar" style="height:90px"><span class="val">9</span></div>
+            <div class="bar" style="height:70px"><span class="val">7</span></div>
+            <div class="bar" style="height:45px"><span class="val">4</span></div>
+            <div class="bar" style="height:100px"><span class="val">10</span></div>
+            <div class="bar" style="height:60px"><span class="val">6</span></div>
+            <div class="bar" style="height:75px"><span class="val">8</span></div>
+            <div class="bar" style="height:55px"><span class="val">5</span></div>
+          </div>
+        </div>
+        <div class="chart-box">
+          <h3>Certificados por Estado</h3>
+          <div class="pie">
+            <div class="donut"></div>
+            <ul class="legend">
+              <li style="--c:#22c55e">Emitidos (280)</li>
+              <li style="--c:#f59e0b">Pendientes (60)</li>
+              <li style="--c:#ef4444">Revocados (40)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

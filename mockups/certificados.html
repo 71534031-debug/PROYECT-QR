@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificados - Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#f5f5f5}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#1a1a1a;padding:24px;color:#fff}
+    .sidebar .logo{font-size:18px;font-weight:700;color:#C5954C;margin-bottom:32px}
+    .sidebar .logo span{display:block;font-size:11px;font-weight:400;color:#888}
+    .sidebar nav a{display:block;padding:10px 14px;color:#aaa;text-decoration:none;border-radius:8px;font-size:14px;margin-bottom:4px;transition:.2s}
+    .sidebar nav a:hover,.sidebar nav a.active{background:#333;color:#fff}
+    .sidebar nav a.active{color:#C5954C}
+    .main{flex:1;padding:24px 32px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .topbar h1{font-size:22px;color:#1a1a1a}
+    .btn{background:#8B1A1A;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .btn:hover{background:#6e1515}
+    .btn-outline{background:transparent;color:#666;border:1.5px solid #ddd;padding:9px 18px;border-radius:8px;font-size:13px;cursor:pointer;transition:.2s}
+    .btn-outline:hover{border-color:#8B1A1A;color:#8B1A1A}
+    .gen-bar{display:flex;gap:12px;align-items:center;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+    .gen-bar select{flex:1;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px}
+    .search-bar{display:flex;gap:10px;margin-bottom:16px}
+    .search-bar input{flex:1;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px}
+    .search-bar input:focus{outline:none;border-color:#8B1A1A}
+    .search-bar select{padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px;color:#555;background:#fff}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;background:#fafafa;border-bottom:1px solid #eee}
+    td{padding:12px 14px;font-size:13px;color:#333;border-bottom:1px solid #f5f5f5}
+    .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+    .badge.emit{background:#dcfce7;color:#16a34a}
+    .badge.rev{background:#fee2e2;color:#dc2626}
+    .badge.can{background:#f3f4f6;color:#6b7280}
+    .action-btns{display:flex;gap:4px}
+    .action-btns button{background:none;border:1px solid #eee;padding:5px 8px;border-radius:5px;cursor:pointer;font-size:12px;transition:.2s}
+    .action-btns button:hover{border-color:#8B1A1A;color:#8B1A1A}
+    .pagination{display:flex;justify-content:center;gap:4px;margin-top:20px}
+    .pagination button{padding:8px 14px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:13px}
+    .pagination button.active{background:#8B1A1A;color:#fff;border-color:#8B1A1A}
+    .return{position:fixed;top:20px;left:260px;background:#fff;border:1px solid #ddd;padding:6px 14px;border-radius:8px;text-decoration:none;color:#666;font-size:12px;transition:.2s;z-index:10}
+    .return:hover{border-color:#8B1A1A;color:#8B1A1A}
+  </style>
+</head>
+<body>
+  <a class="return" href="index.html">← Volver</a>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="logo">CERTIFICADOS QR<span>Sistema de Gestión</span></div>
+      <nav>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="actividades.html">📋 Actividades</a>
+        <a href="participantes.html">👥 Participantes</a>
+        <a href="plantillas.html">🎨 Plantillas</a>
+        <a href="certificados.html" class="active">📜 Certificados</a>
+        <a href="configuracion.html">⚙️ Configuración</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Certificados</h1>
+        <div style="display:flex;gap:10px">
+          <button class="btn-outline">📥 Exportar</button>
+          <button class="btn-outline">🗑️ Cancelar selección</button>
+        </div>
+      </div>
+      <div class="gen-bar">
+        <span style="font-weight:600;font-size:13px;color:#555;white-space:nowrap">Actividad:</span>
+        <select><option>Capacitación en Ética Profesional</option><option>Conferencia de Actualización</option></select>
+        <button class="btn">⚡ Generar Certificados</button>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar certificado...">
+        <select><option>Todos</option><option>Emitido</option><option>Revocado</option></select>
+        <select><option>Todas las actividades</option><option>Capacitación</option></select>
+      </div>
+      <table>
+        <thead><tr><th style="width:30px"><input type="checkbox"></th><th>Código</th><th>Participante</th><th>Actividad</th><th>Emisión</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" checked></td><td style="font-family:monospace;color:#888">a1b2-c3d4</td><td>Juan Pérez García</td><td>Cap. Ética</td><td>01/06/2026</td><td><span class="badge emit">Emitido</span></td><td class="action-btns"><button>👁️</button><button>⬇️</button><button>🔗</button></td></tr>
+          <tr><td><input type="checkbox"></td><td style="font-family:monospace;color:#888">e5f6-g7h8</td><td>María López Torres</td><td>Cap. Ética</td><td>01/06/2026</td><td><span class="badge emit">Emitido</span></td><td class="action-btns"><button>👁️</button><button>⬇️</button><button>🔗</button></td></tr>
+          <tr><td><input type="checkbox"></td><td style="font-family:monospace;color:#888">i9j0-k1l2</td><td>Carlos Ramírez</td><td>Conferencia</td><td>15/05/2026</td><td><span class="badge rev">Revocado</span></td><td class="action-btns"><button>👁️</button><button>⬇️</button><button>🔗</button></td></tr>
+        </tbody>
+      </table>
+      <div class="pagination"><button class="active">1</button><button>2</button><button>3</button></div>
+    </div>
+  </div>
+</body>
+</html>

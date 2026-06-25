@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantillas - Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#f5f5f5}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#1a1a1a;padding:24px;color:#fff}
+    .sidebar .logo{font-size:18px;font-weight:700;color:#C5954C;margin-bottom:32px}
+    .sidebar .logo span{display:block;font-size:11px;font-weight:400;color:#888}
+    .sidebar nav a{display:block;padding:10px 14px;color:#aaa;text-decoration:none;border-radius:8px;font-size:14px;margin-bottom:4px;transition:.2s}
+    .sidebar nav a:hover,.sidebar nav a.active{background:#333;color:#fff}
+    .sidebar nav a.active{color:#C5954C}
+    .main{flex:1;padding:24px 32px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .topbar h1{font-size:22px;color:#1a1a1a}
+    .btn{background:#8B1A1A;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .btn:hover{background:#6e1515}
+    .editor{display:flex;gap:24px}
+    .canvas{flex:1;background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.06);min-height:500px;position:relative;overflow:hidden}
+    .canvas .bg-placeholder{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#f0f0f0 0%,#e0d8d0 100%);display:flex;align-items:center;justify-content:center;color:#ccc;font-size:14px}
+    .canvas .field-drag{position:absolute;padding:6px 12px;background:rgba(139,26,26,.08);border:1.5px dashed #8B1A1A;border-radius:6px;font-size:13px;color:#8B1A1A;cursor:move;font-weight:500}
+    .props{width:280px;background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);height:fit-content}
+    .props h3{font-size:15px;color:#1a1a1a;margin-bottom:16px}
+    .field{margin-bottom:12px}
+    .field label{display:block;font-size:11px;font-weight:500;color:#888;margin-bottom:3px}
+    .field input,.field select{width:100%;padding:8px 10px;border:1.5px solid #e0e0e0;border-radius:6px;font-size:13px}
+    .field input:focus{outline:none;border-color:#8B1A1A}
+    .props .btn-add{width:100%;padding:8px;border:1.5px dashed #8B1A1A;background:transparent;color:#8B1A1A;border-radius:8px;font-size:12px;cursor:pointer;margin-top:8px;transition:.2s}
+    .props .btn-add:hover{background:rgba(139,26,26,.05)}
+    .props .save-btn{width:100%;padding:10px;background:#8B1A1A;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-top:12px}
+    .props .save-btn:hover{background:#6e1515}
+    .upload-area{margin-top:12px;padding:16px;border:1.5px dashed #ddd;border-radius:8px;text-align:center;font-size:12px;color:#888;cursor:pointer}
+    .upload-area:hover{border-color:#8B1A1A;color:#8B1A1A}
+    .return{position:fixed;top:20px;left:260px;background:#fff;border:1px solid #ddd;padding:6px 14px;border-radius:8px;text-decoration:none;color:#666;font-size:12px;transition:.2s;z-index:10}
+    .return:hover{border-color:#8B1A1A;color:#8B1A1A}
+  </style>
+</head>
+<body>
+  <a class="return" href="index.html">← Volver</a>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="logo">CERTIFICADOS QR<span>Sistema de Gestión</span></div>
+      <nav>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="actividades.html">📋 Actividades</a>
+        <a href="participantes.html">👥 Participantes</a>
+        <a href="plantillas.html" class="active">🎨 Plantillas</a>
+        <a href="certificados.html">📜 Certificados</a>
+        <a href="configuracion.html">⚙️ Configuración</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Editor de Plantilla</h1>
+        <div style="display:flex;gap:10px"><button class="btn">📂 Guardar</button></div>
+      </div>
+      <div class="editor">
+        <div class="canvas">
+          <div class="bg-placeholder">📎 Imagen de fondo (sube una imagen aquí)</div>
+          <div class="field-drag" style="top:120px;left:250px">{{NOMBRE}}</div>
+          <div class="field-drag" style="top:180px;left:220px">{{ACTIVIDAD}}</div>
+          <div class="field-drag" style="top:240px;left:260px">{{FECHA}}</div>
+          <div style="position:absolute;bottom:30px;right:30px;width:90px;height:90px;border:1.5px dashed #ccc;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa">QR</div>
+          <div style="position:absolute;bottom:30px;left:30px;width:100px;height:40px;border:1.5px dashed #ccc;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa">Logo</div>
+        </div>
+        <div class="props">
+          <h3>Propiedades del Campo</h3>
+          <div class="field"><label>Campo</label><select><option>{{NOMBRE}}</option><option>{{ACTIVIDAD}}</option><option>{{FECHA}}</option></select></div>
+          <div class="field"><label>Posición X</label><input type="text" value="250"></div>
+          <div class="field"><label>Posición Y</label><input type="text" value="120"></div>
+          <div class="field"><label>Tamaño</label><select><option>14px</option><option>16px</option><option selected>18px</option><option>24px</option></select></div>
+          <div class="field"><label>Color</label><input type="text" value="#333333"></div>
+          <div class="field"><label>Alineación</label><select><option>Izquierda</option><option selected>Centro</option><option>Derecha</option></select></div>
+          <button class="btn-add">+ Agregar Campo</button>
+          <div class="upload-area">📁 Subir imagen de fondo</div>
+          <button class="save-btn">💾 Guardar Plantilla</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
