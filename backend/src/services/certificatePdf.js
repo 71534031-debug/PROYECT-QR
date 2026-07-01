@@ -1,6 +1,8 @@
 const fs = require('fs/promises');
 const fssync = require('fs');
 const path = require('path');
+const http = require('http');
+const https = require('https');
 const PDFDocument = require('pdfkit');
 const QRCode = require('qrcode');
 
@@ -45,8 +47,24 @@ async function writeCertificatePdf({ outputPath, templateHtml, replacements, qrU
   }
 }
 
+async function downloadImage(url) {
+  if (!url.startsWith('http')) return url;
+  const parsed = new URL(url);
+  const mod = parsed.protocol === 'https:' ? https : http;
+  const tmpPath = path.join(require('os').tmpdir(), 'cert_bg_' + Date.now() + path.extname(parsed.pathname) || '.png');
+  const file = fssync.createWriteStream(tmpPath);
+  return new Promise((resolve, reject) => {
+    mod.get(url, (res) => {
+      if (res.statusCode !== 200) { file.close(); fssync.unlink(tmpPath, () => {}); resolve(url); return; }
+      res.pipe(file);
+      file.on('finish', () => { file.close(); resolve(tmpPath); });
+    }).on('error', () => { file.close(); fssync.unlink(tmpPath, () => {}); resolve(url); });
+  });
+}
+
 async function writeImageBasedPdf({ outputPath, backgroundImagePath, campos, replacements, qrUrl }) {
   const [pageW, pageH] = A4_LANDSCAPE;
+  const resolvedBg = await downloadImage(backgroundImagePath);
 
   const doc = new PDFDocument({
     size: A4_LANDSCAPE,
@@ -59,7 +77,9 @@ async function writeImageBasedPdf({ outputPath, backgroundImagePath, campos, rep
   const stream = fssync.createWriteStream(outputPath);
   doc.pipe(stream);
 
-  doc.image(backgroundImagePath, 0, 0, { width: pageW, height: pageH });
+  if (fssync.existsSync(resolvedBg)) {
+    doc.image(resolvedBg, 0, 0, { width: pageW, height: pageH });
+  }
 
   // Track positions to draw signature line if needed
   let sigLineX = null, sigLineY = null, sigLineW = null;

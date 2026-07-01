@@ -85,7 +85,7 @@ function createCertificadosRouter() {
           replacements,
           qrUrl,
           templateHtml: plantilla.contenido,
-          backgroundImagePath: plantilla.imagen_fondo ? path.join(process.cwd(), plantilla.imagen_fondo) : null,
+          backgroundImagePath: plantilla.imagen_fondo ? (plantilla.imagen_fondo.startsWith('http') ? plantilla.imagen_fondo : path.join(process.cwd(), plantilla.imagen_fondo)) : null,
           campos: campos.length > 0 ? campos : null,
         };
         await writeCertificatePdf(pdfOpts);
