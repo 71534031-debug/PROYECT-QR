@@ -47,7 +47,7 @@ function createPlantillasRouter() {
       }
       const insertNombre = nombre.trim();
       const insertContenido = contenido || null;
-      const [r] = await pool.query('INSERT INTO plantillas (nombre, contenido, activa) VALUES (?, ?, 1)', [insertNombre, insertContenido]);
+      const [r] = await pool.query('INSERT INTO plantillas (nombre, contenido, activa) VALUES (?, ?, TRUE)', [insertNombre, insertContenido]);
       await pool.query(
         `INSERT INTO auditoria_eventos (usuario_id, accion, entidad_tipo, entidad_id, ip, user_agent) VALUES (?, 'PLANTILLA_CREADA', 'plantilla', ?, ?, ?)`,
         [req.user.id || null, r.insertId, req.ip || '', req.get('user-agent') || '']
@@ -168,7 +168,7 @@ function createPlantillasRouter() {
       await pool.query('UPDATE plantillas SET nombre = COALESCE(?, nombre), contenido = COALESCE(?, contenido), activa = COALESCE(?, activa) WHERE id = ?', [
         nombre || null,
         contenido || null,
-        activa === undefined ? null : activa ? 1 : 0,
+        activa === undefined ? null : Boolean(activa),
         id
       ]);
       await pool.query(
