@@ -76,6 +76,10 @@ async function pgGetConnection(pool) {
   return {
     query: (sql, params) => {
       const pgSql = convertParams(sql);
+      const isInsert = /^\s*INSERT\s/i.test(pgSql);
+      if (isInsert && !pgSql.toUpperCase().includes('RETURNING')) {
+        return client.query(pgSql + ' RETURNING id', params).then(r => [{ insertId: r.rows[0]?.id ?? 0, affectedRows: r.rowCount }]);
+      }
       return client.query(pgSql, params).then(r => [r.rows]);
     },
     beginTransaction: () => client.query('BEGIN'),
