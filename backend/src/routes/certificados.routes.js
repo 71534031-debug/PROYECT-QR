@@ -112,6 +112,23 @@ function createCertificadosRouter() {
     return res.json({ success: true, generados });
   });
 
+  router.delete('/limpiar', authenticate, requireRoles('ADMIN'), async (req, res) => {
+    const pool = req.app.locals.pool;
+    try {
+      const [rows] = await pool.query('SELECT ruta_pdf, id FROM certificados');
+      for (const c of rows) {
+        const abs = path.join(process.cwd(), c.ruta_pdf);
+        if (fs.existsSync(abs)) fs.unlinkSync(abs);
+      }
+      await pool.query('DELETE FROM auditoria_eventos WHERE entidad_tipo = ?', ['certificado']);
+      await pool.query('DELETE FROM certificados');
+      return res.json({ success: true, message: `Eliminados ${rows.length} certificados` });
+    } catch (err) {
+      console.error('Error limpiando certificados:', err);
+      return res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
   router.get('/', authenticate, requireRoles('ADMIN', 'ADMINISTRATIVO'), async (req, res) => {
     const pool = req.app.locals.pool;
     const actividadId = req.query.actividad_id;
