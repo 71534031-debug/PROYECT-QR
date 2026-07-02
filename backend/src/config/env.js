@@ -2,7 +2,7 @@ function getEnv() {
   return {
     JWT_SECRET: process.env.JWT_SECRET || 'dev_secret',
     JWT_DOWNLOAD_SECRET: process.env.JWT_DOWNLOAD_SECRET || process.env.JWT_SECRET || 'dev_secret',
-    FRONTEND_PUBLIC_URL: process.env.FRONTEND_PUBLIC_URL || 'http://localhost:5173',
+    FRONTEND_PUBLIC_URL: (process.env.FRONTEND_PUBLIC_URL || 'https://proyect-qr-weld.vercel.app').replace(/\/login\/?$/, ''),
     EMAIL_USER: process.env.EMAIL_USER || '',
     EMAIL_PASS: process.env.EMAIL_PASS || '',
     SMTP_HOST: process.env.SMTP_HOST || '',
