@@ -10,8 +10,27 @@ export default function Validar() {
   const [error, setError] = useState('');
   const inputRef = useRef(null);
   const [animState, setAnimState] = useState('idle');
+  const submittedRef = useRef(false);
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const codeFromUrl = params.get('c');
+    if (codeFromUrl) {
+      setCodigo(codeFromUrl);
+    }
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (codigo && !submittedRef.current) {
+      submittedRef.current = true;
+      const timer = setTimeout(() => {
+        const fakeEvent = { preventDefault: () => {} };
+        handleSubmit(fakeEvent);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [codigo]);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
